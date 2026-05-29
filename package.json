@@ -1,15 +1,16 @@
 {
   "name": "elnur-pro-site",
   "version": "1.0.0",
-  "description": "Elnur Pro Sales and Chat System",
+  "description": "Elnur Pro System",
   "main": "server.js",
+  "license": "MIT",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
-    "cron": "^3.1.7",
+    "cron": "3.1.7",
     "express": "^4.19.2",
     "mongoose": "^8.3.1",
     "socket.io": "^4.7.5"
