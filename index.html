@@ -7,60 +7,74 @@
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --bg: #07070a; --panel: #12121a; --primary: #00e5ff; --sec: #ff0055; --gold: #ffd700; --text: #fff; --gray: #888; }
+        /* Dark Theme (Default) */
+        :root { 
+            --bg: #07070a; --panel: #12121a; --primary: #00e5ff; --sec: #ff0055; 
+            --gold: #ffd700; --text: #fff; --gray: #888; --border: #333; --input: #0a0a0f;
+        }
+        /* Light Theme */
+        body.light-mode {
+            --bg: #f4f4f9; --panel: #ffffff; --text: #1a1a24; --border: #ddd; --input: #eee;
+            --primary: #008c9e; --sec: #d9004c;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
-        body { background: var(--bg); color: var(--text); overflow-x: hidden; }
-        .bg-fx { position: fixed; top:0; left:0; width:100%; height:100%; background: radial-gradient(circle at 50% 0%, rgba(0,229,255,0.05) 0%, transparent 50%); z-index: -1; }
+        body { background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; transition: 0.3s; }
         
+        .bg-fx { position: fixed; top:0; left:0; width:100%; height:100%; background: radial-gradient(circle at 50% 0%, rgba(0,229,255,0.05) 0%, transparent 50%); z-index: -1; }
+        body.light-mode .bg-fx { background: radial-gradient(circle at 50% 0%, rgba(0,140,158,0.1) 0%, transparent 50%); }
+
         h1, h2, h3, .raj { font-family: 'Rajdhani', sans-serif; text-transform: uppercase; }
         .btn { padding: 10px 20px; border: 1px solid var(--primary); background: transparent; color: var(--primary); cursor: pointer; font-weight: bold; border-radius: 5px; transition: 0.3s; text-transform: uppercase; }
-        .btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary); }
+        .btn:hover { background: var(--primary); color: #fff; box-shadow: 0 0 15px var(--primary); }
         .btn-gold { border-color: var(--gold); color: var(--gold); }
         .btn-gold:hover { background: var(--gold); color: #000; box-shadow: 0 0 15px var(--gold); }
         .hidden { display: none !important; }
-        .input { width: 100%; padding: 10px; background: #0a0a0f; border: 1px solid #333; color: white; border-radius: 5px; margin-top: 5px; margin-bottom: 15px; }
+        .input { width: 100%; padding: 10px; background: var(--input); border: 1px solid var(--border); color: var(--text); border-radius: 5px; margin-top: 5px; margin-bottom: 15px; }
         .input:focus { border-color: var(--primary); outline: none; }
         
         /* Navbar */
-        nav { display: flex; justify-content: space-between; padding: 20px 40px; background: rgba(18,18,26,0.9); backdrop-filter: blur(10px); border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 100; }
+        nav { display: flex; justify-content: space-between; padding: 20px 40px; background: var(--panel); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
         .logo { font-size: 1.5rem; font-weight: 900; color: var(--primary); cursor: pointer; text-shadow: 0 0 10px var(--primary); }
-        .nav-mid gap: 15px; display: flex; align-items: center;
-        .lang-btn { background: none; border: none; color: #aaa; cursor: pointer; font-weight: bold; margin: 0 5px; }
-        .lang-btn.active { color: var(--text); text-decoration: underline; }
-        .tag { padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; background: #333; }
-        .tag.Developer { background: var(--sec); } .tag.Admin { background: var(--gold); color: black; } .tag.Helper { background: var(--primary); color: black; } .tag.VIP { background: #8a2be2; box-shadow: 0 0 10px #8a2be2; }
+        .tag { padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; background: var(--border); color: var(--text); }
+        .tag.Developer { background: var(--sec); color: white; } .tag.Admin { background: var(--gold); color: black; } .tag.Helper { background: var(--primary); color: black; } .tag.VIP { background: #8a2be2; color: white; box-shadow: 0 0 10px #8a2be2; }
         
-        /* Containers */
-        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; flex: 1; width: 100%; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
         
         /* Cards */
-        .card { background: var(--panel); padding: 20px; border: 1px solid #222; border-radius: 10px; text-align: center; position: relative; transition: 0.3s; }
+        .card { background: var(--panel); padding: 20px; border: 1px solid var(--border); border-radius: 10px; text-align: center; position: relative; transition: 0.3s; }
         .card:hover { border-color: var(--primary); transform: translateY(-5px); }
         .card img { width: 80px; height: 80px; object-fit: contain; margin-bottom: 10px; }
         .price { color: var(--gold); font-size: 1.5rem; font-weight: 900; }
-        .vip-badge { position: absolute; top: 10px; right: 10px; background: #8a2be2; font-size: 0.6rem; padding: 3px 6px; border-radius: 5px; }
 
-        /* VIP Banner */
-        .vip-banner { background: linear-gradient(45deg, #1a0033, #4b0082); border: 1px solid #8a2be2; padding: 20px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        /* VIP Banner & Section */
+        .vip-banner { background: linear-gradient(45deg, #1a0033, #4b0082); border: 1px solid #8a2be2; padding: 20px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; color: white; }
+        .vip-features { font-size: 0.9rem; color: #d4a5ff; margin-top: 5px; }
         
         /* Modals */
         .modal-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; }
-        .modal { background: var(--panel); padding: 30px; border-radius: 15px; border: 1px solid var(--primary); width: 400px; max-width: 90%; max-height: 85vh; overflow-y: auto; }
+        .modal { background: var(--panel); padding: 30px; border-radius: 15px; border: 1px solid var(--primary); width: 450px; max-width: 90%; max-height: 85vh; overflow-y: auto; color: var(--text); }
         
         /* Chat UI */
-        .chat-box { height: 300px; background: #0a0a0f; overflow-y: auto; padding: 10px; border: 1px solid #333; margin-bottom: 10px; display: flex; flex-direction: column; gap: 10px; }
-        .msg { padding: 8px 12px; border-radius: 10px; max-width: 80%; font-size: 0.9rem; }
+        .chat-box { height: 350px; background: var(--input); overflow-y: auto; padding: 15px; border: 1px solid var(--border); margin-bottom: 10px; display: flex; flex-direction: column; gap: 10px; border-radius: 5px; }
+        .chat-box.large { height: 500px; }
+        .msg { padding: 10px; border-radius: 10px; max-width: 80%; font-size: 0.9rem; word-wrap: break-word; }
         .msg.me { align-self: flex-end; background: var(--primary); color: #000; }
-        .msg.them { align-self: flex-start; background: #222; }
-        .msg-sender { font-size: 0.7rem; font-weight: bold; margin-bottom: 3px; opacity: 0.8; }
+        .msg.them { align-self: flex-start; background: var(--border); color: var(--text); }
+        .msg-sender { font-size: 0.7rem; font-weight: bold; margin-bottom: 5px; opacity: 0.8; }
+        .msg img { max-width: 100%; border-radius: 5px; margin-top: 5px; }
         
-        /* Admin Tables */
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { padding: 10px; border-bottom: 1px solid #333; text-align: left; font-size: 0.9rem; }
+        th, td { padding: 10px; border-bottom: 1px solid var(--border); text-align: left; font-size: 0.9rem; }
         
-        #toast { position: fixed; bottom: 20px; right: 20px; padding: 15px 25px; background: var(--primary); color: #000; font-weight: bold; border-radius: 5px; z-index: 9999; transform: translateX(200%); transition: 0.3s; }
+        #toast { position: fixed; bottom: 20px; right: 20px; padding: 15px 25px; background: var(--primary); color: #fff; font-weight: bold; border-radius: 5px; z-index: 9999; transform: translateX(200%); transition: 0.3s; }
         #toast.show { transform: translateX(0); }
+
+        /* Footer */
+        footer { background: var(--panel); border-top: 1px solid var(--border); padding: 30px; text-align: center; margin-top: auto; }
+        .footer-content { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+        .secure-badge { color: #00e676; font-weight: bold; font-size: 1.2rem; display: flex; align-items: center; gap: 5px; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -68,102 +82,106 @@
     
     <nav>
         <div class="logo" onclick="nav('home')">SHUKUROVS GAMING</div>
-        <div class="nav-mid">
-            <button class="lang-btn active" onclick="setLang('az')">AZ</button>
-            <button class="lang-btn" onclick="setLang('tr')">TR</button>
-            <button class="lang-btn" onclick="setLang('en')">EN</button>
-            <button class="lang-btn" onclick="setLang('ru')">RU</button>
-        </div>
-        <div id="nav-unauth">
+        <div id="nav-unauth" style="display: flex; gap:10px;">
+            <button class="btn btn-gold" onclick="openModal('settings-modal')"><i class="fas fa-cog"></i></button>
             <button class="btn" onclick="openModal('auth-modal')" data-t="loginBtn">Giriş / Qeydiyyat</button>
         </div>
-        <div id="nav-auth" class="hidden" style="display: flex; align-items: center; gap: 15px;">
+        <div id="nav-auth" class="hidden" style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
             <span id="user-tag" class="tag"></span>
             <span id="user-nick" style="font-weight:bold;"></span>
             <span class="price raj" style="font-size:1.2rem;" id="user-bal">0.00 AZN</span>
-            <button class="btn btn-gold" onclick="nav('support')" data-t="bakiyeBtn">+ Bakiye</button>
-            <button class="btn" onclick="nav('support')" data-t="destekBtn">Destek/Sifariş</button>
+            <button class="btn btn-gold" onclick="nav('support')" data-t="bakiyeBtn">+ Bakiye / Dəstək</button>
             <button id="dev-btn" class="btn hidden" style="border-color:var(--sec); color:var(--sec);" onclick="nav('admin')">PANEL</button>
-            <button class="btn" style="border-color:#555; color:#fff;" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+            <button class="btn btn-gold" onclick="openModal('settings-modal')"><i class="fas fa-cog"></i></button>
+            <button class="btn" style="border-color:var(--border); color:var(--text);" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
         </div>
     </nav>
 
     <div class="container">
-        <!-- HOME -->
         <div id="sec-home">
             <div class="vip-banner">
                 <div>
                     <h2 class="raj" style="color:var(--gold);"><i class="fas fa-crown"></i> VIP STATUS AL</h2>
-                    <p data-t="vipDesc" style="font-size:0.9rem;">Hər alışda 2% cashback, xüsusi tag və öncəlikli dəstək! Sadecə 15.00 AZN.</p>
+                    <p data-t="vipDesc" style="font-size:0.95rem;">Hər alışda 2% cashback, xüsusi tag və öncəlikli dəstək!</p>
+                    <div class="vip-features">✨ Xüsusi VIP Çatı | ⚡ Anında Sifariş Təsdiqi | 🎁 VIP Kampaniyalar</div>
                 </div>
-                <button class="btn btn-gold" onclick="buyVip()" data-t="vipBtn">VIP AL (15 AZN)</button>
+                <button class="btn btn-gold" style="font-size: 1.1rem; padding: 15px 30px;" onclick="buyVip()" data-t="vipBtn">VIP AL (15 AZN)</button>
             </div>
             
-            <div style="margin-bottom: 20px; display:flex; gap:10px; overflow-x:auto;">
-                <button class="btn" onclick="renderProds('all')">TÜMÜ</button>
-                <button class="btn" onclick="renderProds('PUBG')">PUBG</button>
-                <button class="btn" onclick="renderProds('FF')">FREE FIRE</button>
-                <button class="btn" onclick="renderProds('VALO')">VALORANT</button>
-                <button class="btn" onclick="renderProds('MLBB')">MLBB</button>
-            </div>
+            <div id="category-filters" style="margin-bottom: 20px; display:flex; gap:10px; overflow-x:auto; padding-bottom: 10px;">
+                </div>
 
             <div class="grid" id="products-grid"></div>
         </div>
 
-        <!-- SUPPORT / TICKETS -->
         <div id="sec-support" class="hidden">
             <h2 class="raj" style="margin-bottom:20px; color:var(--primary);" data-t="destekTitle">Dəstək & Sifarişlər</h2>
-            <p style="color:#aaa; margin-bottom:20px;" data-t="destekInfo">Bakiye yükləmək, sifariş problemləri və ya suallar üçün bilet (ticket) yaradın.</p>
+            <p style="color:var(--gray); margin-bottom:20px;" data-t="destekInfo">Bakiye yükləmək üçün çeki bizə atın və ya probleminizi bildirin.</p>
             <button class="btn" onclick="openModal('new-ticket-modal')" data-t="newTicket">YENİ BİLET YARAT</button>
-            
             <div id="user-tickets" style="margin-top:20px; display:flex; flex-direction:column; gap:10px;"></div>
         </div>
 
-        <!-- ADMIN/DEV PANEL -->
         <div id="sec-admin" class="hidden">
             <h2 class="raj" style="color:var(--sec); margin-bottom:20px;">YÖNETİM PANELİ (GİZLİ)</h2>
-            <div style="display:flex; gap:10px; margin-bottom:20px;">
+            <div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap: wrap;">
                 <button class="btn" onclick="adminView('tickets')">BİLETLER & ÖDEMELER</button>
-                <button class="btn Developer-only" onclick="adminView('users')">KULLANICILAR / YETKİ</button>
-                <button class="btn Developer-only" onclick="adminView('products')">ÜRÜN EKLE</button>
-                <button class="btn" onclick="adminView('chats')">GENEL CHATLER</button>
+                <button class="btn dev-only" onclick="adminView('users')">KULLANICILAR / YETKİ</button>
+                <button class="btn dev-only" onclick="adminView('products')">ÜRÜN / KATEQORİYA EKLE</button>
+                <button class="btn" onclick="adminView('chat-dev')">DEV & ADMIN SOHBET</button>
+                <button class="btn" onclick="adminView('chat-helper')">HELPER & ADMIN SOHBET</button>
             </div>
-            <div id="admin-content" style="background:var(--panel); padding:20px; border-radius:10px; border:1px solid #333;"></div>
+            <div id="admin-content" style="background:var(--panel); padding:20px; border-radius:10px; border:1px solid var(--border);"></div>
         </div>
     </div>
 
-    <!-- MODALS -->
-    
-    <!-- Auth Modal -->
+    <footer>
+        <div class="footer-content">
+            <h3 class="raj" style="color: var(--primary);">SHUKUROVS GAMING</h3>
+            <p>Developer: Elnur | Bütün hüquqlar qorunur &copy; 2026</p>
+            <p><i class="fab fa-tiktok"></i> TikTok: <b>shukurovs_ff</b></p>
+            <p><i class="fab fa-whatsapp"></i> WhatsApp: <b>099 846 16 06</b></p>
+            <div class="secure-badge"><i class="fas fa-shield-alt"></i> 100% Güvənli Alışveriş</div>
+        </div>
+    </footer>
+
+    <div class="modal-bg hidden" id="settings-modal">
+        <div class="modal">
+            <h2 class="raj" style="color:var(--primary); margin-bottom:15px;">Ayarlar</h2>
+            <label>Sayt Teması:</label>
+            <select id="theme-select" class="input" onchange="changeTheme()">
+                <option value="dark">Qara (Dark)</option>
+                <option value="light">Ağ (Light)</option>
+            </select>
+            <label>Dil:</label>
+            <select id="lang-select" class="input" onchange="setLang(this.value)">
+                <option value="az">AZ</option>
+                <option value="tr">TR</option>
+                <option value="en">EN</option>
+                <option value="ru">RU</option>
+            </select>
+            <button class="btn" style="width:100%; border:none; color:var(--gray);" onclick="closeModal('settings-modal')">Bağla</button>
+        </div>
+    </div>
+
     <div class="modal-bg hidden" id="auth-modal">
         <div class="modal">
             <h2 id="auth-title" class="raj" style="color:var(--primary); margin-bottom:15px;">QEYDİYYAT</h2>
-            
-            <div id="auth-step-1">
-                <label>Gmail:</label> <input type="email" id="reg-email" class="input" placeholder="mail@gmail.com">
+            <div id="auth-reg">
                 <label>Nickname:</label> <input type="text" id="reg-nick" class="input" placeholder="Oyunçu Adı">
                 <label>Şifrə:</label> <input type="password" id="reg-pass" class="input" placeholder="***">
-                <button class="btn" style="width:100%" onclick="sendRegCode()">KOD GÖNDƏR</button>
+                <button class="btn" style="width:100%" onclick="register()">QEYDİYYATDAN KEÇ</button>
                 <p style="margin-top:10px; font-size:0.8rem; cursor:pointer; color:var(--gold);" onclick="toggleAuth()">Zaten hesabın var? Giriş et.</p>
             </div>
-
-            <div id="auth-step-code" class="hidden">
-                <p style="color:var(--sec); font-size:0.8rem; margin-bottom:10px;">(Simulyasiya: Kodunuz <b>1234</b>)</p>
-                <label>Gmail Təsdiq Kodu:</label> <input type="text" id="reg-code" class="input" placeholder="1234">
-                <button class="btn btn-gold" style="width:100%" onclick="verifyCode()">TƏSDİQLƏ VƏ BİTİR</button>
-            </div>
-
-            <div id="auth-step-login" class="hidden">
+            <div id="auth-log" class="hidden">
                 <label>Nickname:</label> <input type="text" id="log-nick" class="input">
                 <label>Şifrə:</label> <input type="password" id="log-pass" class="input">
                 <button class="btn" style="width:100%" onclick="login()">GİRİŞ</button>
                 <p style="margin-top:10px; font-size:0.8rem; cursor:pointer; color:var(--gold);" onclick="toggleAuth()">Hesab yoxdur? Qeydiyyat.</p>
             </div>
-            <button class="btn" style="border:none; color:#555; margin-top:10px;" onclick="closeModal('auth-modal')">Bağla</button>
+            <button class="btn" style="border:none; color:var(--gray); margin-top:10px; width:100%;" onclick="closeModal('auth-modal')">Bağla</button>
         </div>
     </div>
 
-    <!-- Buy Modal -->
     <div class="modal-bg hidden" id="buy-modal">
         <div class="modal">
             <h3 id="buy-name" class="raj" style="color:var(--primary);"></h3>
@@ -171,41 +189,42 @@
             <label id="buy-label" style="margin-top:15px; display:block;">Oyun ID:</label>
             <input type="text" id="buy-id" class="input">
             <button class="btn" style="width:100%" onclick="confirmBuy()">SİFARİŞİ TƏSDİQLƏ</button>
-            <button class="btn" style="border:none; color:#555; margin-top:10px; width:100%" onclick="closeModal('buy-modal')">Ləğv Et</button>
+            <button class="btn" style="border:none; color:var(--gray); margin-top:10px; width:100%" onclick="closeModal('buy-modal')">Ləğv Et</button>
         </div>
     </div>
 
-    <!-- New Ticket Modal -->
     <div class="modal-bg hidden" id="new-ticket-modal">
         <div class="modal">
             <h3 class="raj">YENİ BİLET</h3>
             <label>Mövzu:</label>
             <select id="t-type" class="input">
-                <option value="Sifariş Sorunu">Sifariş Sorunu</option>
-                <option value="Bakiye Yükləmə">Bakiye Yükləmək İstəyirəm (Kart/Kassa)</option>
-                <option value="Hesab Dəstəyi">Hesab Dəstəyi</option>
+                <option value="Sifariş Sorunu">Sifariş Sorunu (Yardım)</option>
+                <option value="Bakiye Yükləmə">Bakiye Yükləmək (Ödəniş Bildirimi)</option>
                 <option value="Digər">Digər Suallar</option>
             </select>
-            <label>Açıqlama:</label>
+            <label>Mesaj / Açıqlama:</label>
             <textarea id="t-msg" class="input" rows="4"></textarea>
             <button class="btn" style="width:100%" onclick="createTicket()">GÖNDƏR</button>
-            <button class="btn" style="border:none; color:#555; width:100%" onclick="closeModal('new-ticket-modal')">Bağla</button>
+            <button class="btn" style="border:none; color:var(--gray); width:100%" onclick="closeModal('new-ticket-modal')">Bağla</button>
         </div>
     </div>
 
-    <!-- Chat/View Ticket Modal -->
     <div class="modal-bg hidden" id="chat-modal">
-        <div class="modal" style="width:500px;">
+        <div class="modal" style="width:600px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                 <h3 class="raj" id="chat-title">Bilet #</h3>
-                <button class="btn" style="padding:2px 8px; border-color:var(--sec); color:var(--sec);" onclick="closeTicket()">Bileti Bağla (Həll olundu)</button>
+                <button class="btn dev-only" style="padding:2px 8px; border-color:var(--sec); color:var(--sec);" onclick="closeTicket()">Bağla (Həll olundu)</button>
             </div>
             <div class="chat-box" id="chat-box"></div>
-            <div style="display:flex; gap:10px;">
-                <input type="text" id="chat-input" class="input" style="margin:0; flex:1;" placeholder="Mesaj yaz...">
-                <button class="btn" onclick="sendMsg()">></button>
+            
+            <div style="display:flex; flex-direction:column; gap:5px;">
+                <input type="text" id="chat-img-input" class="input" style="margin:0;" placeholder="Çek və ya Şəkil URL-i (İstəyə bağlı)">
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="chat-input" class="input" style="margin:0; flex:1;" placeholder="Mesaj yaz...">
+                    <button class="btn" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
+                </div>
             </div>
-            <!-- Admin Balance Add Tool inside Chat -->
+
             <div id="admin-bal-tool" class="hidden" style="margin-top:15px; padding:10px; border:1px solid var(--gold); border-radius:5px;">
                 <label style="color:var(--gold); font-size:0.8rem;">Müştəriyə Bakiye Vur (Sadece Dev/Admin):</label>
                 <div style="display:flex; gap:5px; margin-top:5px;">
@@ -213,52 +232,43 @@
                     <button class="btn btn-gold" onclick="adminAddBal()">VUR</button>
                 </div>
             </div>
-            <button class="btn" style="border:none; color:#555; width:100%; margin-top:10px;" onclick="closeModal('chat-modal')">Geri</button>
+            <button class="btn" style="border:none; color:var(--gray); width:100%; margin-top:10px;" onclick="closeModal('chat-modal')">Geri</button>
         </div>
     </div>
 
-    <!-- Add Product Modal (Admin) -->
     <div class="modal-bg hidden" id="add-prod-modal">
         <div class="modal">
-            <h3 class="raj">YENİ MƏHSUL (DEV)</h3>
-            <label>Kategoriya:</label> <input type="text" id="ap-cat" class="input" placeholder="PUBG, FF, VALO...">
-            <label>Adı:</label> <input type="text" id="ap-name" class="input" placeholder="Məsələn: 60 UC">
+            <h3 class="raj">YENİ MƏHSUL / KATEQORİYA (DEV)</h3>
+            <p style="font-size:0.8rem; color:var(--gray); margin-bottom:10px;">Yeni kateqoriya yazsanız (məs: Tik Tok), avtomatik yaradılacaq.</p>
+            <label>Kategoriya (Məs: Free Fire, Tik Tok):</label> <input type="text" id="ap-cat" class="input">
+            <label>Adı (Məs: 60 UC, 100 Elmas):</label> <input type="text" id="ap-name" class="input">
             <label>Qiymət (AZN):</label> <input type="number" id="ap-price" class="input">
-            <label>Endirimsiz Qiymət (Üzərindən xətt çəkilmiş, boş qala bilər):</label> <input type="number" id="ap-old" class="input">
-            <label>Oyunçudan istənilən məlumat (Label):</label> <input type="text" id="ap-label" class="input" placeholder="Player ID">
+            <label>Oyunçudan istənilən məlumat (Label):</label> <input type="text" id="ap-label" class="input" placeholder="Oyunçu ID">
+            <label>Şəkil URL:</label> <input type="text" id="ap-img" class="input" placeholder="https://...">
             <button class="btn btn-gold" style="width:100%" onclick="saveProduct()">ƏLAVƏ ET</button>
-            <button class="btn" style="border:none; color:#555; width:100%" onclick="closeModal('add-prod-modal')">Bağla</button>
+            <button class="btn" style="border:none; color:var(--gray); width:100%" onclick="closeModal('add-prod-modal')">Bağla</button>
         </div>
     </div>
 
     <div id="toast"></div>
 
     <script>
-        // --- DATABASE SETUP (localStorage) ---
+        // --- DATABASE SETUP ---
+        let defaultProducts = [
+            { id:1, cat:'Free Fire', name:'110 Elmas', price:1.90, req:'Free Fire ID', img:'https://cdn-icons-png.flaticon.com/512/2850/2850989.png' },
+            { id:2, cat:'PUBG', name:'60 UC', price:1.90, req:'PUBG ID', img:'https://cdn-icons-png.flaticon.com/512/751/751381.png' },
+            { id:3, cat:'VALORANT', name:'115 VP (TR)', price:1.80, req:'Riot ID', img:'https://cdn-icons-png.flaticon.com/512/3801/3801731.png' }
+        ];
+
         let db = JSON.parse(localStorage.getItem('sg_db')) || {
             users: [],
-            products: [
-                // Free Fire (As requested)
-                { id:1, cat:'FF', name:'Mini Haftalık 90 Elmas', price:0.90, old:1.30, req:'Free Fire ID', img:'https://cdn-icons-png.flaticon.com/512/2850/2850989.png' },
-                { id:2, cat:'FF', name:'Aylık 2600 Elmas', price:13.00, old:14.00, req:'Free Fire ID', img:'https://cdn-icons-png.flaticon.com/512/2850/2850989.png' },
-                { id:3, cat:'FF', name:'110 Elmas', price:1.90, old:2.40, req:'Free Fire ID', img:'https://cdn-icons-png.flaticon.com/512/2850/2850989.png' },
-                // PUBG (Cosmo Chest logic + markup)
-                { id:4, cat:'PUBG', name:'60 UC', price:1.90, old:2.10, req:'PUBG ID', img:'https://cdn-icons-png.flaticon.com/512/751/751381.png' },
-                { id:5, cat:'PUBG', name:'325 UC', price:7.50, old:8.00, req:'PUBG ID', img:'https://cdn-icons-png.flaticon.com/512/751/751381.png' },
-                { id:6, cat:'PUBG', name:'660 UC', price:14.80, old:15.50, req:'PUBG ID', img:'https://cdn-icons-png.flaticon.com/512/751/751381.png' },
-                // VALORANT (Markup)
-                { id:7, cat:'VALO', name:'115 VP (TR)', price:1.80, req:'Riot ID', img:'https://cdn-icons-png.flaticon.com/512/3801/3801731.png' },
-                { id:8, cat:'VALO', name:'485 VP (TR)', price:7.60, req:'Riot ID', img:'https://cdn-icons-png.flaticon.com/512/3801/3801731.png' },
-                // MLBB
-                { id:9, cat:'MLBB', name:'86 Elmas', price:2.10, req:'MLBB ID (Server)', img:'https://cdn-icons-png.flaticon.com/512/2850/2850989.png' }
-            ],
+            products: defaultProducts,
             tickets: [],
-            chats: { admin: [], helper: [] }
+            generalChats: { devAdmin: [], helperAdmin: [] }
         };
 
-        // Initialize "Elnur" Developer account
         if(!db.users.find(u => u.nick === 'Elnur')) {
-            db.users.push({ id:'u0', email:'elnur@admin.com', nick:'Elnur', pass:'12345', role:'Developer', balance: 9999.00, isVip: true });
+            db.users.push({ id:'u0', nick:'Elnur', pass:'12345', role:'Developer', balance: 9999.00, isVip: true });
             saveDb();
         }
 
@@ -272,20 +282,25 @@
 
         // --- TRANSLATION (i18n) ---
         const dict = {
-            az: { loginBtn:"Giriş / Qeydiyyat", vipDesc:"Hər alışda 2% cashback, xüsusi tag və öncəlikli dəstək! Sadecə 15.00 AZN.", vipBtn:"VIP AL (15 AZN)", bakiyeBtn:"+ Bakiye", destekBtn:"Destek/Sifariş", destekTitle:"Dəstək & Sifarişlər", destekInfo:"Bakiye yükləmək, sifariş problemləri üçün bilet yaradın.", newTicket:"YENİ BİLET YARAT" },
-            tr: { loginBtn:"Giriş / Kayıt", vipDesc:"Her alışta %2 iade, özel etiket ve öncelikli destek! Sadece 15.00 AZN.", vipBtn:"VIP AL (15 AZN)", bakiyeBtn:"+ Bakiye", destekBtn:"Destek/Sipariş", destekTitle:"Destek & Siparişler", destekInfo:"Bakiye yükleme, sipariş sorunları için bilet oluşturun.", newTicket:"YENİ BİLET OLUŞTUR" },
-            en: { loginBtn:"Login / Register", vipDesc:"2% cashback on every purchase, special tag & priority support! Only 15.00 AZN.", vipBtn:"BUY VIP (15 AZN)", bakiyeBtn:"+ Funds", destekBtn:"Support/Orders", destekTitle:"Support & Orders", destekInfo:"Create a ticket for adding funds or order issues.", newTicket:"CREATE TICKET" },
-            ru: { loginBtn:"Вход / Регистрация", vipDesc:"Кэшбэк 2% с каждой покупки, особый тег и приоритетная поддержка! Всего 15.00 AZN.", vipBtn:"КУПИТЬ VIP (15 AZN)", bakiyeBtn:"+ Баланс", destekBtn:"Поддержка/Заказы", destekTitle:"Поддержка и Заказы", destekInfo:"Создайте тикет для пополнения баланса или проблем с заказами.", newTicket:"СОЗДАТЬ ТИКЕТ" }
+            az: { loginBtn:"Giriş / Qeydiyyat", vipDesc:"Hər alışda 2% cashback, xüsusi tag və öncəlikli dəstək!", vipBtn:"VIP AL (15 AZN)", bakiyeBtn:"+ Bakiye / Dəstək", destekTitle:"Dəstək & Sifarişlər", destekInfo:"Bakiye yükləmək üçün çeki bizə atın və ya probleminizi bildirin.", newTicket:"YENİ BİLET YARAT" },
+            tr: { loginBtn:"Giriş / Kayıt", vipDesc:"Her alışta %2 iade, özel etiket ve öncelikli destek!", vipBtn:"VIP AL (15 AZN)", bakiyeBtn:"+ Bakiye / Destek", destekTitle:"Destek & Siparişler", destekInfo:"Bakiye yüklemek için dekont atın veya sorununuzu yazın.", newTicket:"YENİ BİLET OLUŞTUR" },
+            en: { loginBtn:"Login / Register", vipDesc:"2% cashback, special tag & priority support!", vipBtn:"BUY VIP (15 AZN)", bakiyeBtn:"+ Funds / Support", destekTitle:"Support & Orders", destekInfo:"Send receipt to add funds or report an issue.", newTicket:"CREATE TICKET" },
+            ru: { loginBtn:"Вход / Регистрация", vipDesc:"Кэшбэк 2%, особый тег и приоритетная поддержка!", vipBtn:"КУПИТЬ VIP (15 AZN)", bakiyeBtn:"+ Баланс / Поддержка", destekTitle:"Поддержка и Заказы", destekInfo:"Отправьте чек для пополнения или сообщите о проблеме.", newTicket:"СОЗДАТЬ ТИКЕТ" }
         };
 
         function setLang(l) {
             lang = l;
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
             document.querySelectorAll('[data-t]').forEach(el => {
                 let key = el.getAttribute('data-t');
                 if(dict[lang][key]) el.innerText = dict[lang][key];
             });
+        }
+
+        // --- THEME ---
+        function changeTheme() {
+            let val = document.getElementById('theme-select').value;
+            if(val === 'light') document.body.classList.add('light-mode');
+            else document.body.classList.remove('light-mode');
         }
 
         // --- CORE UI ---
@@ -295,16 +310,19 @@
         }
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        
         function nav(sec) {
             ['sec-home', 'sec-support', 'sec-admin'].forEach(s => document.getElementById(s).classList.add('hidden'));
             document.getElementById('sec-'+sec).classList.remove('hidden');
-            if(sec === 'support') { if(!curUser) return showToast("Giriş edin!"); renderUserTickets(); }
+            if(sec === 'support') { 
+                if(!curUser) return showToast("Giriş edin!"); 
+                renderUserTickets(); 
+            }
             if(sec === 'admin') adminView('tickets');
         }
 
         function updateNav() {
             if(curUser) {
-                // Update local curUser reference from DB just in case
                 let fresh = db.users.find(u => u.id === curUser.id);
                 if(fresh) curUser = fresh;
 
@@ -315,39 +333,41 @@
                 document.getElementById('user-tag').innerText = curUser.isVip ? 'VIP ' + curUser.role : curUser.role;
                 document.getElementById('user-tag').className = 'tag ' + (curUser.isVip ? 'VIP' : curUser.role);
                 
-                if(curUser.role === 'Developer' || curUser.role === 'Admin') document.getElementById('dev-btn').classList.remove('hidden');
-                else document.getElementById('dev-btn').classList.add('hidden');
+                document.querySelectorAll('.dev-only').forEach(el => {
+                    el.style.display = (curUser.role === 'Developer') ? 'inline-block' : 'none';
+                });
+                
+                if(curUser.role === 'Developer' || curUser.role === 'Admin' || curUser.role === 'Helper') {
+                    document.getElementById('dev-btn').classList.remove('hidden');
+                } else {
+                    document.getElementById('dev-btn').classList.add('hidden');
+                }
             } else {
                 document.getElementById('nav-unauth').classList.remove('hidden');
                 document.getElementById('nav-auth').classList.add('hidden');
             }
         }
 
-        // --- AUTH LOGIC ---
-        let authState = 'reg1';
+        // --- AUTH LOGIC (No Email) ---
+        let isLogin = false;
         function toggleAuth() {
-            authState = authState === 'reg1' ? 'log' : 'reg1';
-            document.getElementById('auth-title').innerText = authState === 'log' ? 'GİRİŞ' : 'QEYDİYYAT';
-            document.getElementById('auth-step-1').classList.toggle('hidden', authState !== 'reg1');
-            document.getElementById('auth-step-login').classList.toggle('hidden', authState !== 'log');
-            document.getElementById('auth-step-code').classList.add('hidden');
+            isLogin = !isLogin;
+            document.getElementById('auth-title').innerText = isLogin ? 'GİRİŞ' : 'QEYDİYYAT';
+            document.getElementById('auth-reg').classList.toggle('hidden', isLogin);
+            document.getElementById('auth-log').classList.toggle('hidden', !isLogin);
         }
-        function sendRegCode() {
-            if(!document.getElementById('reg-email').value || !document.getElementById('reg-nick').value) return showToast("Doldurun!");
-            document.getElementById('auth-step-1').classList.add('hidden');
-            document.getElementById('auth-step-code').classList.remove('hidden');
-            showToast("Gmail-ə kod göndərildi! (Simulyasiya: 1234)");
-        }
-        function verifyCode() {
-            if(document.getElementById('reg-code').value !== '1234') return showToast("Səhv kod!");
-            let email = document.getElementById('reg-email').value;
+        
+        function register() {
             let nick = document.getElementById('reg-nick').value;
             let pass = document.getElementById('reg-pass').value;
+            if(!nick || !pass) return showToast("Bütün xanaları doldurun!");
             if(db.users.find(u => u.nick === nick)) return showToast("Bu Nick artıq var!");
-            let nu = { id:'u'+Date.now(), email, nick, pass, role:'Member', balance:0, isVip:false };
+            
+            let nu = { id:'u'+Date.now(), nick, pass, role:'Member', balance:0, isVip:false };
             db.users.push(nu); saveDb(); curUser = nu; saveCur();
             closeModal('auth-modal'); showToast("Uğurlu qeydiyyat!");
         }
+        
         function login() {
             let n = document.getElementById('log-nick').value; let p = document.getElementById('log-pass').value;
             let u = db.users.find(x => x.nick === n && x.pass === p);
@@ -356,16 +376,24 @@
         }
         function logout() { curUser = null; localStorage.removeItem('sg_cur'); nav('home'); updateNav(); }
 
-        // --- PRODUCTS & VIP ---
+        // --- PRODUCTS & CATEGORIES ---
+        function buildCategories() {
+            let cats = [...new Set(db.products.map(p => p.cat))];
+            let filterDiv = document.getElementById('category-filters');
+            let html = `<button class="btn" onclick="renderProds('all')">TÜMÜ</button>`;
+            cats.forEach(c => {
+                html += `<button class="btn" onclick="renderProds('${c}')">${c.toUpperCase()}</button>`;
+            });
+            filterDiv.innerHTML = html;
+        }
+
         function renderProds(cat) {
             let arr = cat === 'all' ? db.products : db.products.filter(p => p.cat === cat);
             document.getElementById('products-grid').innerHTML = arr.map(p => `
                 <div class="card">
-                    ${p.old ? `<span style="position:absolute; top:10px; left:10px; background:var(--sec); font-size:0.7rem; padding:2px 5px;">ENDİRİM</span>` : ''}
-                    <img src="${p.img}">
+                    <img src="${p.img || 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png'}">
                     <h4 style="margin-bottom:10px;">${p.name}</h4>
                     <div class="price">${p.price.toFixed(2)} AZN</div>
-                    ${p.old ? `<div style="text-decoration:line-through; font-size:0.8rem; color:#888;">${p.old.toFixed(2)} AZN</div>` : ''}
                     <button class="btn" style="width:100%; margin-top:10px;" onclick="openBuy(${p.id})">AL</button>
                 </div>
             `).join('');
@@ -377,10 +405,8 @@
             if(curUser.balance < 15) return showToast("Bakiye çatışmır! Dəstək panelindən bakiye vurun.");
             curUser.balance -= 15; curUser.isVip = true;
             let dbU = db.users.find(u => u.id === curUser.id); dbU.balance = curUser.balance; dbU.isVip = true;
-            saveDb(); saveCur(); showToast("TƏBRİKLƏR! VIP STATUS ALINDI!");
-            // Auto create ticket for VIP record
             db.tickets.push({ id:'TKT-'+Date.now(), uId:curUser.id, uNick:curUser.nick, type:'Sistem', subj:'VIP Status Alındı', status:'Bağlı', msgs:[] });
-            saveDb();
+            saveDb(); saveCur(); showToast("TƏBRİKLƏR! VIP STATUS ALINDI!");
         }
 
         function openBuy(id) {
@@ -395,34 +421,33 @@
 
         function confirmBuy() {
             let reqId = document.getElementById('buy-id').value;
-            if(!reqId) return showToast("ID daxil edin!");
+            if(!reqId) return showToast("Məlumatı daxil edin!");
             if(curUser.balance < curBuy.price) return showToast("Bakiye çatışmır!");
             
-            // Deduct
             let finalPrice = curBuy.price;
             let cb = 0;
-            if(curUser.isVip) { cb = finalPrice * 0.02; finalPrice -= cb; } // 2% Cashback logic
+            if(curUser.isVip) { cb = finalPrice * 0.02; finalPrice -= cb; } 
             
             curUser.balance -= finalPrice;
             let dbU = db.users.find(u => u.id === curUser.id); dbU.balance = curUser.balance;
             
-            // Create Order Ticket
-            let t = { id:'ORD-'+Math.floor(Math.random()*9000), uId:curUser.id, uNick:curUser.nick, type:'Sifariş', subj:`Sifariş: ${curBuy.name} | ID: ${reqId}`, status:'Açıq', msgs:[{s:'Sistem', t:`Sifariş yaradıldı. Məbləğ: ${finalPrice.toFixed(2)} AZN. Ödəndi.`}] };
+            let t = { id:'ORD-'+Math.floor(Math.random()*9000), uId:curUser.id, uNick:curUser.nick, type:'Sifariş', subj:`Sifariş: ${curBuy.name} | ID: ${reqId}`, status:'Açıq', msgs:[{s:'Sistem', t:`Sifariş yaradıldı. Ödəndi: ${finalPrice.toFixed(2)} AZN.`}] };
             if(cb>0) t.msgs.push({s:'Sistem', t:`VIP Cashback: ${cb.toFixed(2)} AZN qənaət etdiniz!`});
             
             db.tickets.push(t); saveDb(); saveCur();
             closeModal('buy-modal'); showToast("Sifariş Təsdiqləndi! Biletlərə baxın.");
         }
 
-        // --- TICKETS & CHAT ---
+        // --- TICKETS & CHAT (Member & Support limits) ---
         function createTicket() {
             let type = document.getElementById('t-type').value;
             let msg = document.getElementById('t-msg').value;
             if(!msg) return showToast("Açıqlama yazın!");
-            let t = { id:'TKT-'+Math.floor(Math.random()*9000), uId:curUser.id, uNick:curUser.nick, type, subj:msg, status:'Açıq', msgs:[{s:curUser.nick, t:msg}] };
+            
+            let t = { id:'TKT-'+Math.floor(Math.random()*9000), uId:curUser.id, uNick:curUser.nick, type, subj:msg, status:'Açıq', msgs:[{s:curUser.nick, role:curUser.role, t:msg}] };
             
             if(type === 'Bakiye Yükləmə') {
-                t.msgs.push({s:'Sistem', t:'Bakiye yükləmək üçün Dev/Admin-i gözləyin. Sizə kart nömrəsi atılacaq, çeki bura atarsınız.'});
+                t.msgs.push({s:'Sistem', role:'Sistem', t:'Bakiye yükləmək üçün yalnız Developer (və ya icazəli Admin) sizinlə əlaqə saxlayacaq. Lütfən ödəniş çekini (Şəkil URL) göndərin.'});
             }
             
             db.tickets.push(t); saveDb();
@@ -430,12 +455,12 @@
         }
 
         function renderUserTickets() {
-            let arr = db.tickets.filter(t => t.uId === curUser.id).reverse();
+            let arr = db.tickets.filter(t => t.uId === curUser.id).sort((a,b) => a.status === 'Bağlı' ? 1 : b.status === 'Bağlı' ? -1 : 0);
             document.getElementById('user-tickets').innerHTML = arr.map(t => `
-                <div style="background:#111; border:1px solid #333; padding:15px; border-radius:5px; display:flex; justify-content:space-between; align-items:center;">
+                <div style="background:var(--input); border:1px solid var(--border); padding:15px; border-radius:5px; display:flex; justify-content:space-between; align-items:center; opacity: ${t.status==='Bağlı'?'0.6':'1'}">
                     <div>
                         <b style="color:var(--primary);">${t.id}</b> - ${t.type} <br>
-                        <span style="font-size:0.8rem; color:#888;">Durum: <span style="color:${t.status==='Açıq'?'var(--gold)':'var(--sec)'}">${t.status}</span></span>
+                        <span style="font-size:0.8rem; color:var(--gray);">Durum: <span style="color:${t.status==='Açıq'?'var(--gold)':'var(--sec)'}">${t.status}</span></span>
                     </div>
                     <button class="btn" onclick="openChat('${t.id}')">GİR</button>
                 </div>
@@ -446,7 +471,6 @@
             curTicket = db.tickets.find(t => t.id === id);
             document.getElementById('chat-title').innerText = "Bilet: " + curTicket.id;
             
-            // Admin Balance Tool visibility
             let tool = document.getElementById('admin-bal-tool');
             if((curUser.role === 'Developer' || curUser.role === 'Admin') && curTicket.type === 'Bakiye Yükləmə') {
                 tool.classList.remove('hidden');
@@ -458,119 +482,197 @@
 
         function renderChatMsgs() {
             let box = document.getElementById('chat-box');
+            box.classList.remove('large');
             box.innerHTML = curTicket.msgs.map(m => {
                 let isMe = m.s === curUser.nick;
-                let c = isMe ? 'me' : 'them';
-                if(m.s === 'Sistem') c = 'them'; // System messages look like them but distinct if wanted
-                return `<div class="msg ${c}"><div class="msg-sender">${m.s}</div>${m.t}</div>`;
+                let cls = isMe ? 'me' : 'them';
+                let imgTag = m.img ? `<img src="${m.img}" alt="Çek">` : '';
+                let roleTag = m.role ? `<span style="color:var(--gold)">[${m.role}]</span>` : '';
+                return `
+                    <div class="msg ${cls}">
+                        <div class="msg-sender">${roleTag} ${m.s}</div>
+                        <div>${m.t}</div>
+                        ${imgTag}
+                    </div>
+                `;
             }).join('');
             box.scrollTop = box.scrollHeight;
         }
 
         function sendMsg() {
-            let v = document.getElementById('chat-input').value; if(!v) return;
-            curTicket.msgs.push({ s:curUser.nick, t:v });
-            db.tickets.find(t => t.id === curTicket.id).msgs = curTicket.msgs;
-            saveDb(); document.getElementById('chat-input').value = ''; renderChatMsgs();
+            let txt = document.getElementById('chat-input').value;
+            let img = document.getElementById('chat-img-input').value;
+            if(!txt && !img) return;
+
+            // Admin restriction on Payment tickets (Admin can't talk FIRST unless Dev replies or it's a general ticket)
+            if(curUser.role === 'Admin' && curTicket.type === 'Bakiye Yükləmə') {
+                let hasDevSpoken = curTicket.msgs.some(m => m.role === 'Developer');
+                if(!hasDevSpoken) {
+                    return showToast("Bakiye yükləmə biletində ilk olaraq Developer müştəri ilə danışmalıdır!");
+                }
+            }
+            // Helper restriction (Cannot speak in payments)
+            if(curUser.role === 'Helper' && curTicket.type === 'Bakiye Yükləmə') {
+                return showToast("Helper yalnız dəstək biletlərinə baxa bilər!");
+            }
+
+            curTicket.msgs.push({ s: curUser.nick, role: curUser.role, t: txt, img: img });
+            saveDb();
+            document.getElementById('chat-input').value = '';
+            document.getElementById('chat-img-input').value = '';
+            renderChatMsgs();
         }
 
         function closeTicket() {
-            if(curUser.role !== 'Developer' && curUser.role !== 'Admin' && curUser.role !== 'Helper') return showToast("Səlahiyyət yoxdur!");
-            curTicket.status = 'Bağlı'; saveDb(); showToast("Bağlandı!"); closeModal('chat-modal');
-            if(!document.getElementById('sec-admin').classList.contains('hidden')) adminView('tickets');
-            else renderUserTickets();
+            curTicket.status = 'Bağlı'; saveDb();
+            renderChatMsgs(); showToast("Bilet bağlandı!");
+            renderUserTickets(); 
+            if(document.getElementById('sec-admin').classList.contains('hidden') === false) { adminView('tickets'); }
+        }
+
+        // --- ADMIN / DEV PANEL ---
+        function adminView(v) {
+            let cont = document.getElementById('admin-content');
+            cont.innerHTML = '';
+            
+            if(v === 'tickets') {
+                cont.innerHTML = `
+                    <input type="text" class="input" id="search-ticket" onkeyup="searchAdminTickets()" placeholder="Bilet Nömrəsi və ya Ad ilə axtar...">
+                    <div id="admin-t-list"></div>
+                `;
+                searchAdminTickets();
+            }
+            else if(v === 'users' && curUser.role === 'Developer') {
+                cont.innerHTML = `
+                    <input type="text" class="input" id="search-user" onkeyup="searchUsers()" placeholder="Kullanıcı Adı axtar...">
+                    <div id="admin-u-list"></div>
+                `;
+                searchUsers();
+            }
+            else if(v === 'products' && curUser.role === 'Developer') {
+                cont.innerHTML = `
+                    <button class="btn" onclick="openModal('add-prod-modal')">+ YENİ MƏHSUL / KATEQORİYA</button>
+                    <table style="margin-top:15px;">
+                        <tr><th>Kategoriya</th><th>Ad</th><th>Qiymət</th><th>Sil</th></tr>
+                        ${db.products.map(p => `<tr><td>${p.cat}</td><td>${p.name}</td><td>${p.price.toFixed(2)}</td><td><button class="btn" style="padding:2px 5px" onclick="delProd(${p.id})">X</button></td></tr>`).join('')}
+                    </table>
+                `;
+            }
+            else if(v === 'chat-dev' && (curUser.role === 'Developer' || curUser.role === 'Admin')) {
+                renderGenChat('devAdmin', 'Developer & Admin Müzakirə Çatı');
+            }
+            else if(v === 'chat-helper') {
+                renderGenChat('helperAdmin', 'Helper & Admin/Dev Köməkləşmə Çatı');
+            }
+        }
+
+        function searchAdminTickets() {
+            let val = document.getElementById('search-ticket').value.toLowerCase();
+            let arr = db.tickets.filter(t => t.id.toLowerCase().includes(val) || t.uNick.toLowerCase().includes(val))
+                                .sort((a,b) => a.status === 'Bağlı' ? 1 : b.status === 'Bağlı' ? -1 : 0);
+            document.getElementById('admin-t-list').innerHTML = arr.map(t => `
+                <div style="background:var(--bg); margin-bottom:5px; padding:10px; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; opacity: ${t.status==='Bağlı'?'0.6':'1'}">
+                    <div><b>${t.id}</b> - ${t.uNick} - ${t.type} [${t.status}]</div>
+                    <button class="btn" style="padding:5px 10px;" onclick="openChat('${t.id}')">AÇ</button>
+                </div>
+            `).join('');
+        }
+
+        function searchUsers() {
+            let val = document.getElementById('search-user').value.toLowerCase();
+            let arr = db.users.filter(u => u.nick.toLowerCase().includes(val));
+            document.getElementById('admin-u-list').innerHTML = `
+                <table>
+                    <tr><th>Nick</th><th>Bakiye</th><th>Yetki</th><th>Dəyiş</th></tr>
+                    ${arr.map(u => `
+                        <tr>
+                            <td>${u.nick} ${u.isVip?'(VIP)':''}</td>
+                            <td>${u.balance.toFixed(2)}</td>
+                            <td>
+                                <select id="role-${u.id}" style="background:var(--input); color:var(--text);">
+                                    <option value="Member" ${u.role==='Member'?'selected':''}>Member</option>
+                                    <option value="Helper" ${u.role==='Helper'?'selected':''}>Helper</option>
+                                    <option value="Admin" ${u.role==='Admin'?'selected':''}>Admin</option>
+                                </select>
+                            </td>
+                            <td><button class="btn" style="padding:2px 5px" onclick="updateRole('${u.id}')">SAXLA</button></td>
+                        </tr>
+                    `).join('')}
+                </table>
+            `;
+        }
+
+        function updateRole(uid) {
+            let r = document.getElementById('role-'+uid).value;
+            let u = db.users.find(x => x.id === uid); u.role = r; saveDb(); showToast("Yetki dəyişdirildi!");
         }
 
         function adminAddBal() {
-            let am = parseFloat(document.getElementById('admin-add-bal').value);
-            if(!am || am <= 0) return;
-            let u = db.users.find(x => x.id === curTicket.uId);
-            if(u) {
-                u.balance += am;
-                curTicket.msgs.push({ s:'Sistem', t:`Admin terefinden ${am} AZN bakiye yuklendi.` });
-                curTicket.status = 'Bağlı'; // Auto close
-                saveDb(); renderChatMsgs(); showToast("Bakiye vuruldu!");
-                if(curUser.id === u.id) { curUser.balance = u.balance; saveCur(); } // If testing on self
-            }
-        }
-
-        // --- ADMIN PANEL ---
-        function adminView(tab) {
-            let c = document.getElementById('admin-content');
-            
-            // Hide Dev-only buttons if just Admin
-            document.querySelectorAll('.Developer-only').forEach(el => {
-                if(curUser.role !== 'Developer') el.classList.add('hidden');
-                else el.classList.remove('hidden');
-            });
-
-            if(tab === 'tickets') {
-                let html = '<h3>AKTİV BİLETLƏR</h3><table><tr><th>ID</th><th>İstifadəçi</th><th>Mövzu</th><th>Durum</th><th>İşləm</th></tr>';
-                db.tickets.slice().reverse().forEach(t => {
-                    // Helper cant see Bakiye
-                    if(curUser.role === 'Helper' && t.type === 'Bakiye Yükləmə') return;
-                    html += `<tr><td>${t.id}</td><td>${t.uNick}</td><td>${t.type}</td><td>${t.status}</td><td><button class="btn" style="padding:2px 5px;" onclick="openChat('${t.id}')">BAX</button></td></tr>`;
-                });
-                c.innerHTML = html + '</table>';
-            }
-            if(tab === 'users' && curUser.role === 'Developer') {
-                let html = '<h3>İSTİFADƏÇİLƏR</h3><table><tr><th>Nick</th><th>Rol</th><th>Bakiye</th><th>Dəyiş</th></tr>';
-                db.users.forEach(u => {
-                    html += `<tr><td>${u.nick}</td><td>
-                        <select id="r-${u.id}" style="background:#000; color:#fff;">
-                            <option value="Member" ${u.role==='Member'?'selected':''}>Member</option>
-                            <option value="Helper" ${u.role==='Helper'?'selected':''}>Helper</option>
-                            <option value="Admin" ${u.role==='Admin'?'selected':''}>Admin</option>
-                            <option value="Developer" ${u.role==='Developer'?'selected':''}>Developer</option>
-                        </select>
-                    </td><td>${u.balance.toFixed(2)}</td><td><button class="btn" onclick="changeRole('${u.id}')">Yadda Saxla</button></td></tr>`;
-                });
-                c.innerHTML = html + '</table>';
-            }
-            if(tab === 'products' && curUser.role === 'Developer') {
-                c.innerHTML = `<button class="btn btn-gold" onclick="openModal('add-prod-modal')">+ YENİ MƏHSUL</button>
-                <p style="margin-top:10px; font-size:0.8rem;">Məhsulu siyahıya əlavə etmək üçün yuxarıdakı düyməyə basın. Bu anında bazaya yazılacaq.</p>`;
-            }
-            if(tab === 'chats') {
-                c.innerHTML = `
-                    <div style="display:flex; gap:20px;">
-                        <div style="flex:1; background:#000; padding:10px; border:1px solid #333;">
-                            <h4 style="color:var(--sec);">ADMIN CHAT</h4>
-                            <p style="font-size:0.7rem;">Sadece Dev/Admin</p>
-                            <!-- Simulyasiya -->
-                            <div class="chat-box" style="height:150px;"></div>
-                        </div>
-                        <div style="flex:1; background:#000; padding:10px; border:1px solid #333;">
-                            <h4 style="color:var(--primary);">HELPER CHAT</h4>
-                            <p style="font-size:0.7rem;">Dev/Admin/Helper</p>
-                            <div class="chat-box" style="height:150px;"></div>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        function changeRole(id) {
-            let r = document.getElementById('r-'+id).value;
-            let u = db.users.find(x => x.id === id); u.role = r; saveDb(); showToast("Rol yeniləndi!");
+            let amt = parseFloat(document.getElementById('admin-add-bal').value);
+            if(!amt || amt <= 0) return;
+            let target = db.users.find(u => u.id === curTicket.uId);
+            target.balance += amt;
+            curTicket.msgs.push({ s:'Sistem', role:'Sistem', t:`${curUser.nick} tərəfindən hesaba ${amt.toFixed(2)} AZN yükləndi.`});
+            saveDb();
+            document.getElementById('admin-add-bal').value = '';
+            renderChatMsgs(); showToast("Bakiye yükləndi!");
         }
 
         function saveProduct() {
             let cat = document.getElementById('ap-cat').value;
             let name = document.getElementById('ap-name').value;
             let price = parseFloat(document.getElementById('ap-price').value);
-            let old = parseFloat(document.getElementById('ap-old').value) || null;
             let req = document.getElementById('ap-label').value;
+            let img = document.getElementById('ap-img').value;
             
-            if(!cat || !name || !price) return showToast("Vacib xanaları doldur!");
-            
-            db.products.push({ id:Date.now(), cat, name, price, old, req, img:'https://cdn-icons-png.flaticon.com/512/1055/1055661.png' });
-            saveDb(); closeModal('add-prod-modal'); showToast("Məhsul əlavə edildi!");
-            renderProds('all');
+            if(!cat || !name || !price) return showToast("Məlumatları doldurun!");
+            db.products.push({ id:Date.now(), cat, name, price, req, img });
+            saveDb();
+            closeModal('add-prod-modal'); adminView('products'); showToast("Əlavə edildi!");
+            buildCategories(); renderProds('all');
+        }
+        function delProd(id) { db.products = db.products.filter(p => p.id !== id); saveDb(); adminView('products'); buildCategories(); renderProds('all'); }
+
+        // --- GENERAL CHATS (Admin/Dev & Helper) ---
+        let currentGenChat = '';
+        function renderGenChat(type, title) {
+            currentGenChat = type;
+            let cont = document.getElementById('admin-content');
+            cont.innerHTML = `
+                <h3 class="raj" style="color:var(--primary); margin-bottom:10px;">${title}</h3>
+                <div class="chat-box large" id="gen-chat-box"></div>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="gen-chat-input" class="input" style="margin:0; flex:1;" placeholder="Mesaj yaz...">
+                    <button class="btn" onclick="sendGenMsg()">></button>
+                </div>
+            `;
+            updateGenChatMsgs();
         }
 
-        // INIT
-        window.onload = () => { updateNav(); renderProds('all'); };
+        function updateGenChatMsgs() {
+            if(!currentGenChat) return;
+            let box = document.getElementById('gen-chat-box');
+            if(!box) return;
+            box.innerHTML = db.generalChats[currentGenChat].map(m => `
+                <div class="msg ${m.s === curUser.nick ? 'me' : 'them'}">
+                    <div class="msg-sender"><span style="color:var(--gold)">[${m.role}]</span> ${m.s}</div>
+                    <div>${m.t}</div>
+                </div>
+            `).join('');
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function sendGenMsg() {
+            let txt = document.getElementById('gen-chat-input').value;
+            if(!txt) return;
+            db.generalChats[currentGenChat].push({ s: curUser.nick, role: curUser.role, t: txt });
+            saveDb(); document.getElementById('gen-chat-input').value = ''; updateGenChatMsgs();
+        }
+
+        // Init
+        updateNav();
+        buildCategories();
+        renderProds('all');
     </script>
 </body>
 </html>
