@@ -3,187 +3,647 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elnur Pro Panel & Chat</title>
-    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <title>Shukurovs Gaming | Premium E-Pin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: #0f172a; color: #f8fafc; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
-        h2 { color: #38bdf8; margin-bottom: 10px; border-bottom: 2px solid #334155; padding-bottom: 5px; }
-        .container { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; max-width: 1200px; margin: 0 auto; width: 100%; }
-        .box { background: #1e293b; padding: 20px; border-radius: 12px; border: 1px solid #334155; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
-        input, textarea, select, button { width: 100%; padding: 10px; margin: 8px 0; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: #fff; }
-        button { background: #0284c7; color: white; font-weight: bold; cursor: pointer; border: none; transition: 0.2s; }
-        button:hover { background: #0369a1; }
-        .chat-area { height: 250px; border: 1px solid #334155; background: #0f172a; padding: 10px; overflow-y: auto; border-radius: 6px; margin-bottom: 10px; }
-        .msg { margin-bottom: 8px; font-size: 14px; line-height: 1.4; }
-        .tag-dev { color: #ef4444; font-weight: bold; }
-        .tag-admin { color: #f97316; font-weight: bold; }
-        .tag-helper { color: #eab308; font-weight: bold; }
-        .tag-vip { color: #a855f7; font-weight: bold; }
-        .tag-member { color: #3b82f6; }
-        .vip-box { border: 2px dashed #a855f7; background: #2e1065; }
+        :root { --bg: #07070a; --panel: #12121a; --primary: #00e5ff; --sec: #ff0055; --gold: #ffd700; --text: #fff; --gray: #888; --border: #333; --input: #0a0a0f; }
+        body.light-mode { --bg: #f4f4f9; --panel: #ffffff; --text: #1a1a24; --border: #ddd; --input: #eee; --primary: #008c9e; --sec: #d9004c; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+        body { background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; transition: 0.3s; }
+        .bg-fx { position: fixed; top:0; left:0; width:100%; height:100%; background: radial-gradient(circle at 50% 0%, rgba(0,229,255,0.05) 0%, transparent 50%); z-index: -1; }
+        body.light-mode .bg-fx { background: radial-gradient(circle at 50% 0%, rgba(0,140,158,0.1) 0%, transparent 50%); }
+
+        h1, h2, h3, .raj { font-family: 'Rajdhani', sans-serif; text-transform: uppercase; }
+        .btn { padding: 10px 20px; border: 1px solid var(--primary); background: transparent; color: var(--primary); cursor: pointer; font-weight: bold; border-radius: 5px; transition: 0.3s; text-transform: uppercase; }
+        .btn:hover { background: var(--primary); color: #fff; box-shadow: 0 0 15px var(--primary); }
+        .btn-gold { border-color: var(--gold); color: var(--gold); }
+        .btn-gold:hover { background: var(--gold); color: #000; box-shadow: 0 0 15px var(--gold); }
+        .hidden { display: none !important; }
+        .input { width: 100%; padding: 10px; background: var(--input); border: 1px solid var(--border); color: var(--text); border-radius: 5px; margin-top: 5px; margin-bottom: 15px; }
+        .input:focus { border-color: var(--primary); outline: none; }
+        
+        nav { display: flex; justify-content: space-between; padding: 20px 40px; background: var(--panel); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 1.5rem; font-weight: 900; color: var(--primary); cursor: pointer; text-shadow: 0 0 10px var(--primary); }
+        .tag { padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; background: var(--border); color: var(--text); }
+        .tag.Developer { background: var(--sec); color: white; } .tag.Admin { background: var(--gold); color: black; } .tag.Helper { background: var(--primary); color: black; } .tag.VIP { background: #8a2be2; color: white; box-shadow: 0 0 10px #8a2be2; }
+        
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; flex: 1; width: 100%; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        
+        .card { background: var(--panel); padding: 20px; border: 1px solid var(--border); border-radius: 10px; text-align: center; position: relative; transition: 0.3s; }
+        .card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .card img { width: 80px; height: 80px; object-fit: contain; margin-bottom: 10px; border-radius: 50%; }
+        .price { color: var(--gold); font-size: 1.5rem; font-weight: 900; }
+
+        .vip-banner { background: linear-gradient(45deg, #1a0033, #4b0082); border: 1px solid #8a2be2; padding: 20px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; color: white; box-shadow: 0 0 20px rgba(138,43,226,0.4); }
+        .vip-features { font-size: 0.9rem; color: #d4a5ff; margin-top: 5px; }
+        
+        .modal-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+        .modal { background: var(--panel); padding: 30px; border-radius: 15px; border: 1px solid var(--primary); width: 450px; max-width: 90%; max-height: 85vh; overflow-y: auto; color: var(--text); }
+        
+        .chat-box { height: 400px; background: var(--input); overflow-y: auto; padding: 15px; border: 1px solid var(--border); margin-bottom: 10px; display: flex; flex-direction: column; gap: 10px; border-radius: 5px; }
+        .msg { padding: 10px; border-radius: 10px; max-width: 85%; font-size: 0.9rem; word-wrap: break-word; }
+        .msg.me { align-self: flex-end; background: var(--primary); color: #000; }
+        .msg.them { align-self: flex-start; background: #2a2a35; color: #fff; }
+        .msg-sender { font-size: 0.75rem; font-weight: bold; margin-bottom: 5px; opacity: 0.9; }
+        .msg img { max-width: 100%; border-radius: 5px; margin-top: 5px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px 10px; border-bottom: 1px solid var(--border); text-align: left; font-size: 0.9rem; }
+        
+        #toast { position: fixed; bottom: 20px; right: 20px; padding: 15px 25px; background: var(--primary); color: #000; font-weight: bold; border-radius: 5px; z-index: 9999; transform: translateX(200%); transition: 0.3s; }
+        #toast.show { transform: translateX(0); }
+
+        footer { background: var(--panel); border-top: 1px solid var(--border); padding: 30px; text-align: center; margin-top: auto; }
+        .footer-content { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+        .secure-badge { color: #00e676; font-weight: bold; font-size: 1.2rem; display: flex; align-items: center; gap: 5px; margin-top: 10px; }
+        
+        .profile-img-preview { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); margin: 0 auto 15px; display: block; }
     </style>
 </head>
 <body>
-
-    <h1 style="text-align: center; color: #fff;">Elnur Pro İcmalar və Satış Platforması</h1>
+    <div class="bg-fx"></div>
+    
+    <nav>
+        <div class="logo" onclick="nav('home')">SHUKUROVS GAMING</div>
+        <div id="nav-unauth" style="display: flex; gap:10px;">
+            <button class="btn btn-gold" onclick="openModal('settings-modal')"><i class="fas fa-cog"></i></button>
+            <button class="btn" onclick="openModal('auth-modal')" data-t="loginBtn">Giriş / Qeydiyyat</button>
+        </div>
+        <div id="nav-auth" class="hidden" style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+            <span id="user-tag" class="tag"></span>
+            <span id="user-nick" style="font-weight:bold; cursor:pointer;" onclick="nav('profile')"></span>
+            <span class="price raj" style="font-size:1.2rem;" id="user-bal">0.00 AZN</span>
+            <button class="btn btn-gold" onclick="nav('support')">+ Bakiye / Dəstək</button>
+            <button class="btn" onclick="nav('profile')"><i class="fas fa-user"></i> Profil</button>
+            <button id="dev-btn" class="btn hidden" style="border-color:var(--sec); color:var(--sec);" onclick="nav('admin')">PANEL</button>
+            <button class="btn btn-gold" onclick="openModal('settings-modal')"><i class="fas fa-cog"></i></button>
+            <button class="btn" style="border-color:var(--border); color:var(--text);" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+    </nav>
 
     <div class="container">
-        
-        <div class="flex-col" style="display: flex; flex-direction: column; gap: 20px;">
-            
-            <div class="box">
-                <h2>1. Giriş / Qeydiyyat</h2>
-                <p style="font-size: 12px; color: #94a3b8;">* Sistem "Elnur" adına avtomatik Developer statusu verəcək.</p>
-                <input type="text" id="username" placeholder="İstifadəçi adı">
-                <input type="password" id="password" placeholder="Şifrə">
-                <button onclick="register()">Hesab Yarat / Giriş Et</button>
-                <p id="auth-status" style="margin-top: 5px; font-weight: bold; color: #4ade80;"></p>
+        <div id="sec-home">
+            <div class="vip-banner">
+                <div>
+                    <h2 class="raj" style="color:var(--gold);"><i class="fas fa-crown"></i> VIP STATUS AL (AYLIQ)</h2>
+                    <p data-t="vipDesc" style="font-size:0.95rem;">Hər alışda 2% cashback, xüsusi tag, VIP Chat-a giriş və öncəlikli dəstək!</p>
+                    <div class="vip-features">✨ Xüsusi VIP Çatı | ⚡ Anında Sifariş Təsdiqi | 🎁 1 Aylıq Limitsiz VIP</div>
+                </div>
+                <button class="btn btn-gold" style="font-size: 1.1rem; padding: 15px 30px;" onclick="buyVip()">VIP AL (5 AZN)</button>
             </div>
-
-            <div class="box">
-                <h2>2. Hesabım (Profil)</h2>
-                <p style="font-size: 12px; color: #94a3b8; margin-bottom: 5px;">* Adı dəyişmək olmaz, yalnız Ticket ilə mümkündür.</p>
-                <input type="text" id="profile-photo" placeholder="Profil Foto Linki">
-                <textarea id="profile-bio" placeholder="Haqqımda qeyd (Not)"></textarea>
-                <input type="password" id="new-password" placeholder="Yeni Şifrə (Dəyişmək istəyirsinizsə)">
-                <button onclick="updateProfile()">Profili Yenilə</button>
-            </div>
-
-            <div class="box vip-box">
-                <h2>3. VIP Üzvlük (5 AZN / Aylıq)</h2>
-                <p style="font-size: 13px; margin-bottom: 10px;">VIP alaraq xüsusi [VIP] chat otağına giriş qazanın. Sistem 1 aydan sonra avtomatik bitirir.</p>
-                <button style="background: #a855f7;" onclick="buyVip()">5 AZN Ödə və VIP Ol</button>
-            </div>
-
-            <div class="box">
-                <h2>4. Bilet (Ticket) Aç</h2>
-                <select id="ticket-type">
-                    <option value="General">Ümumi Problem</option>
-                    <option value="NameChange">Ad Dəyişmək İstəyirəm</option>
-                    <option value="Support">Texniki Dəstək</option>
-                </select>
-                <textarea id="ticket-content" placeholder="Probleminizi buraya yazın..."></textarea>
-                <button style="background: #10b981;" onclick="createTicket()">Bileti Göndər</button>
-            </div>
-
+            <div id="category-filters" style="margin-bottom: 20px; display:flex; gap:10px; overflow-x:auto; padding-bottom: 10px;"></div>
+            <div class="grid" id="products-grid"></div>
         </div>
 
-        <div class="flex-col" style="display: flex; flex-direction: column; gap: 20px;">
-            
-            <div class="box">
-                <h2>💬 Ümumi Chat (Bütün Üzvlər)</h2>
-                <div class="chat-area" id="general-chat-box"></div>
-                <div style="display: flex; gap: 10px;">
-                    <input type="text" id="general-msg-input" placeholder="Mesajınızı yazın...">
-                    <button style="width: 100px;" onclick="sendGeneralMessage()">Göndər</button>
-                </div>
+        <div id="sec-profile" class="hidden">
+            <h2 class="raj" style="color:var(--primary); margin-bottom:20px;"><i class="fas fa-user-circle"></i> Mənim Profilim</h2>
+            <div style="background:var(--panel); padding:30px; border-radius:10px; border:1px solid var(--border); max-width:600px; margin:0 auto;">
+                <img id="prof-img-view" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="profile-img-preview">
+                <p style="text-align:center; color:var(--sec); font-size:0.8rem; margin-bottom:15px;">Adınızı dəyişmək üçün dəstək xidmətinə (Ticket) müraciət edin.</p>
+                <label>Nickname:</label>
+                <input type="text" id="prof-nick" class="input" disabled>
+                <label>Profil Şəkli (URL):</label>
+                <input type="text" id="prof-img" class="input" placeholder="https://...">
+                <label>Haqqımda (Bio):</label>
+                <textarea id="prof-bio" class="input" rows="3" placeholder="Özünüz haqqında yazın..."></textarea>
+                <label>Yeni Şifrə (Dəyişmək istəyirsinizsə):</label>
+                <input type="password" id="prof-pass" class="input" placeholder="***">
+                <button class="btn btn-gold" style="width:100%; margin-top:10px;" onclick="saveProfile()">PROFİLİ YENİLƏ</button>
             </div>
-
-            <div class="box" style="border-color: #a855f7;">
-                <h2>👑 VIP & Staff Chat (Yalnız VIP, Admin, Helper və Dev)</h2>
-                <div class="chat-area" id="vip-chat-box" style="background: #1e1b4b;"></div>
-                <div style="display: flex; gap: 10px;">
-                    <input type="text" id="vip-msg-input" placeholder="Yalnız özəl üzvlər yaza bilər...">
-                    <button style="width: 100px; background: #a855f7;" onclick="sendVipMessage()">Göndər</button>
-                </div>
-            </div>
-
         </div>
 
+        <div id="sec-support" class="hidden">
+            <h2 class="raj" style="margin-bottom:20px; color:var(--primary);">Dəstək & Sifarişlər</h2>
+            <p style="color:var(--gray); margin-bottom:20px;">Bakiye yükləmək üçün çeki bizə atın, profil adı dəyişmək və ya probleminizi bildirin.</p>
+            <button class="btn" onclick="openModal('new-ticket-modal')">YENİ BİLET YARAT</button>
+            <div id="user-tickets" style="margin-top:20px; display:flex; flex-direction:column; gap:10px;"></div>
+        </div>
+
+        <div id="sec-admin" class="hidden">
+            <h2 class="raj" style="color:var(--sec); margin-bottom:20px;">YÖNETİM PANELİ (GİZLİ)</h2>
+            <div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap: wrap;">
+                <button class="btn" onclick="adminView('tickets')">BİLETLER & ÖDEMELER</button>
+                <button class="btn dev-only" onclick="adminView('users')">KULLANICILAR / YETKİ</button>
+                <button class="btn dev-only" onclick="adminView('products')">ÜRÜN / KATEQORİYA EKLE</button>
+                <button class="btn" onclick="adminView('chat-dev')">DEV & ADMIN SOHBET</button>
+                <button class="btn" onclick="adminView('chat-helper')">HELPER & ADMIN SOHBET</button>
+                <button class="btn" style="border-color:#8a2be2; color:#8a2be2;" onclick="adminView('chat-vip')">VIP CHAT</button>
+            </div>
+            <div id="admin-content" style="background:var(--panel); padding:20px; border-radius:10px; border:1px solid var(--border);"></div>
+        </div>
     </div>
 
-    <script>
-        // !!! BURA DİQQƏT: Render-in sənə verdiyi linki dırnaqların içinə yaz (Sonunda / işarəsi olmasın)
-        const SERVER_URL = "https://shukurovsgaming.onrender.com"; 
-        
-        let socket;
-        let currentUserId = null;
+    <footer>
+        <div class="footer-content">
+            <h3 class="raj" style="color: var(--primary);">SHUKUROVS GAMING</h3>
+            <p>Developer: Elnur | Bütün hüquqlar qorunur &copy; 2026</p>
+            <p><i class="fas fa-globe"></i> Rəsmi Sayt: <a href="https://shukurovsgaming.onrender.com/" target="_blank" style="color: var(--gold); text-decoration: none;"><b>https://shukurovsgaming.onrender.com/</b></a></p>
+            <p><i class="fab fa-tiktok"></i> TikTok: <b>shukurovs_ff</b></p>
+            <p><i class="fab fa-whatsapp"></i> WhatsApp: <b>099 846 16 06</b></p>
+            <div class="secure-badge"><i class="fas fa-shield-alt"></i> 100% Güvənli Alışveriş</div>
+        </div>
+    </footer>
 
-        // Serverə qoşulma linkini tənzimləyirik
-        function connectSocket(userId) {
-            socket = io(SERVER_URL);
+    <div class="modal-bg hidden" id="settings-modal">
+        <div class="modal">
+            <h2 class="raj" style="color:var(--primary); margin-bottom:15px;">Ayarlar</h2>
+            <label>Sayt Teması:</label>
+            <select id="theme-select" class="input" onchange="changeTheme()">
+                <option value="dark">Qara (Dark)</option>
+                <option value="light">Ağ (Light)</option>
+            </select>
+            <button class="btn" style="width:100%; border:none; color:var(--gray);" onclick="closeModal('settings-modal')">Bağla</button>
+        </div>
+    </div>
+
+    <div class="modal-bg hidden" id="auth-modal">
+        <div class="modal">
+            <h2 id="auth-title" class="raj" style="color:var(--primary); margin-bottom:15px;">QEYDİYYAT</h2>
+            <div id="auth-reg">
+                <label>Nickname:</label> <input type="text" id="reg-nick" class="input" placeholder="Oyunçu Adı">
+                <label>Şifrə:</label> <input type="password" id="reg-pass" class="input" placeholder="***">
+                <button class="btn" style="width:100%" onclick="register()">QEYDİYYATDAN KEÇ</button>
+                <p style="margin-top:10px; font-size:0.8rem; cursor:pointer; color:var(--gold);" onclick="toggleAuth()">Zaten hesabın var? Giriş et.</p>
+            </div>
+            <div id="auth-log" class="hidden">
+                <label>Nickname:</label> <input type="text" id="log-nick" class="input">
+                <label>Şifrə:</label> <input type="password" id="log-pass" class="input">
+                <button class="btn" style="width:100%" onclick="login()">GİRİŞ</button>
+                <p style="margin-top:10px; font-size:0.8rem; cursor:pointer; color:var(--gold);" onclick="toggleAuth()">Hesab yoxdur? Qeydiyyat.</p>
+            </div>
+            <button class="btn" style="border:none; color:var(--gray); margin-top:10px; width:100%;" onclick="closeModal('auth-modal')">Bağla</button>
+        </div>
+    </div>
+
+    <div class="modal-bg hidden" id="buy-modal">
+        <div class="modal">
+            <h3 id="buy-name" class="raj" style="color:var(--primary);"></h3>
+            <p id="buy-price" class="price raj"></p>
+            <label id="buy-label" style="margin-top:15px; display:block;">Oyun ID:</label>
+            <input type="text" id="buy-id" class="input">
+            <button class="btn" style="width:100%" onclick="confirmBuy()">SİFARİŞİ TƏSDİQLƏ</button>
+            <button class="btn" style="border:none; color:var(--gray); margin-top:10px; width:100%" onclick="closeModal('buy-modal')">Ləğv Et</button>
+        </div>
+    </div>
+
+    <div class="modal-bg hidden" id="new-ticket-modal">
+        <div class="modal">
+            <h3 class="raj">YENİ BİLET</h3>
+            <label>Mövzu:</label>
+            <select id="t-type" class="input">
+                <option value="Sifariş Sorunu">Sifariş Sorunu (Yardım)</option>
+                <option value="Bakiye Yükləmə">Bakiye Yükləmək (Ödəniş Bildirimi)</option>
+                <option value="Ad Dəyişmə">Adımı Dəyişmək İstəyirəm</option>
+                <option value="Digər">Digər Suallar</option>
+            </select>
+            <label>Mesaj / Açıqlama:</label>
+            <textarea id="t-msg" class="input" rows="4"></textarea>
+            <button class="btn" style="width:100%" onclick="createTicket()">GÖNDƏR</button>
+            <button class="btn" style="border:none; color:var(--gray); width:100%" onclick="closeModal('new-ticket-modal')">Bağla</button>
+        </div>
+    </div>
+
+    <div class="modal-bg hidden" id="chat-modal">
+        <div class="modal" style="width:600px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <h3 class="raj" id="chat-title">Bilet #</h3>
+                <button class="btn dev-only" style="padding:2px 8px; border-color:var(--sec); color:var(--sec);" onclick="closeTicket()">Bağla (Həll olundu)</button>
+            </div>
+            <div class="chat-box" id="chat-box"></div>
             
-            socket.emit('join-server', { userId: userId });
+            <div style="display:flex; flex-direction:column; gap:5px;">
+                <input type="text" id="chat-img-input" class="input" style="margin:0;" placeholder="Çek və ya Şəkil URL-i (İstəyə bağlı)">
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="chat-input" class="input" style="margin:0; flex:1;" placeholder="Mesaj yaz...">
+                    <button class="btn" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
 
-            // Ümumi mesaj gələndə
-            socket.on('receive-general-message', (data) => {
-                const box = document.getElementById('general-chat-box');
-                box.innerHTML += `<div class="msg"><span class="${getTagClass(data.roleTag)}">${data.roleTag}</span> <b>${data.username}:</b> ${data.text}</div>`;
-                box.scrollTop = box.scrollHeight;
-            });
+            <div id="admin-bal-tool" class="hidden" style="margin-top:15px; padding:10px; border:1px solid var(--gold); border-radius:5px;">
+                <label style="color:var(--gold); font-size:0.8rem;">Müştəriyə Bakiye Vur (Sadece Dev/Admin):</label>
+                <div style="display:flex; gap:5px; margin-top:5px;">
+                    <input type="number" id="admin-add-bal" class="input" style="margin:0;" placeholder="Məbləğ AZN">
+                    <button class="btn btn-gold" onclick="adminAddBal()">VUR</button>
+                </div>
+            </div>
+            <button class="btn" style="border:none; color:var(--gray); width:100%; margin-top:10px;" onclick="closeModal('chat-modal')">Geri</button>
+        </div>
+    </div>
 
-            // VIP mesaj gələndə
-            socket.on('receive-vip-message', (data) => {
-                const box = document.getElementById('vip-chat-box');
-                box.innerHTML += `<div class="msg"><span class="${getTagClass(data.roleTag)}">${data.roleTag}</span> <b>${data.username}:</b> ${data.text}</div>`;
-                box.scrollTop = box.scrollHeight;
+    <div class="modal-bg hidden" id="add-prod-modal">
+        <div class="modal">
+            <h3 class="raj">YENİ MƏHSUL (DEV)</h3>
+            <label>Kategoriya:</label> <input type="text" id="ap-cat" class="input">
+            <label>Adı:</label> <input type="text" id="ap-name" class="input">
+            <label>Qiymət (AZN):</label> <input type="number" id="ap-price" class="input">
+            <label>Oyunçudan istənilən məlumat (Label):</label> <input type="text" id="ap-label" class="input" placeholder="Oyunçu ID">
+            <label>Şəkil URL:</label> <input type="text" id="ap-img" class="input">
+            <button class="btn btn-gold" style="width:100%" onclick="saveProduct()">ƏLAVƏ ET</button>
+            <button class="btn" style="border:none; color:var(--gray); width:100%" onclick="closeModal('add-prod-modal')">Bağla</button>
+        </div>
+    </div>
+
+    <div id="toast"></div>
+
+    <script>
+        let db = JSON.parse(localStorage.getItem('sg_db')) || {
+            users: [],
+            products: [], 
+            tickets: [],
+            generalChats: { devAdmin: [], helperAdmin: [], vipChat: [] }
+        };
+
+        if(!db.users.find(u => u.nick === 'Elnur')) {
+            db.users.push({ 
+                id:'u0', nick:'Elnur', pass:'12345', role:'Developer', balance: 9999.00, isVip: true, 
+                vipExpiry: Date.now() + (365 * 24 * 60 * 60 * 1000), photo: '', bio: 'Sistem Yaradıcısı' 
             });
+            saveDb();
         }
 
-        function getTagClass(tag) {
-            if(tag.includes('Developer')) return 'tag-dev';
-            if(tag.includes('Admin')) return 'tag-admin';
-            if(tag.includes('Helper')) return 'tag-helper';
-            if(tag.includes('VIP')) return 'tag-vip';
-            return 'tag-member';
+        let curUser = JSON.parse(localStorage.getItem('sg_cur')) || null;
+        let curTicket = null;
+        let curBuy = null;
+
+        function saveDb() { localStorage.setItem('sg_db', JSON.stringify(db)); }
+        function saveCur() { localStorage.setItem('sg_cur', JSON.stringify(curUser)); }
+
+        function showToast(msg) {
+            let t = document.getElementById('toast');
+            t.innerText = msg;
+            t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 3000);
+        }
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function changeTheme() {
+            let val = document.getElementById('theme-select').value;
+            if(val === 'light') document.body.classList.add('light-mode'); else document.body.classList.remove('light-mode');
+        }
+        
+        function nav(sec) {
+            ['sec-home', 'sec-support', 'sec-admin', 'sec-profile'].forEach(s => document.getElementById(s).classList.add('hidden'));
+            document.getElementById('sec-'+sec).classList.remove('hidden');
+            if(sec === 'support') { if(!curUser) return showToast("Giriş edin!"); renderUserTickets(); }
+            if(sec === 'admin') adminView('tickets');
+            if(sec === 'profile') { if(!curUser) return showToast("Giriş edin!"); loadProfile(); }
         }
 
-        // Qeydiyyat və Giriş funksiyası
-        async function register() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            if(!username || !password) return alert('Məlumatları doldurun!');
-
-            const res = await fetch(`${SERVER_URL}/api/register`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
-            });
-            const data = await res.json();
-
-            if(data.error) {
-                alert('Bu istifadəçi artıq ola bilər və ya xəta baş verdi. Sistemə giriş simulyasiyası edilir.');
-                // Sadəlik üçün real id lazımdır, burda test üçün istifadə edəcəyik
-            } else {
-                document.getElementById('auth-status').innerText = `Giriş edildi! Rolunuz: [${data.role}]`;
-                // Bu nümunədə sadəlik üçün qeydiyyatdan dərhal sonra qoşuluruq. 
-                // MongoDB-də yaranan ID-ni tapmaq lazımdır. Realda bura istifadəçi obyekti dönür.
-                alert('Qeydiyyat uğurludur! İndi chat-dan istifadə edə bilərsiniz.');
+        function checkVipStatus() {
+            if(!curUser) return;
+            let dbU = db.users.find(u => u.id === curUser.id);
+            if(dbU && dbU.isVip && dbU.vipExpiry && Date.now() > dbU.vipExpiry) {
+                dbU.isVip = false;
+                dbU.vipExpiry = null;
+                saveDb();
+                curUser = dbU;
+                saveCur();
+                showToast("VIP statusunuzun vaxtı bitdi!");
             }
         }
 
-        // Ümumi Mesaj Göndərmə
-        function sendGeneralMessage() {
-            const input = document.getElementById('general-msg-input');
-            if(!input.value || !socket) return;
-            socket.emit('send-general-message', input.value);
-            input.value = '';
+        function updateNav() {
+            checkVipStatus();
+            if(curUser) {
+                let fresh = db.users.find(u => u.id === curUser.id);
+                if(fresh) curUser = fresh;
+
+                document.getElementById('nav-unauth').classList.add('hidden');
+                document.getElementById('nav-auth').classList.remove('hidden');
+                document.getElementById('user-nick').innerText = curUser.nick;
+                document.getElementById('user-bal').innerText = curUser.balance.toFixed(2) + ' AZN';
+                document.getElementById('user-tag').innerText = curUser.isVip ? 'VIP ' + curUser.role : curUser.role;
+                document.getElementById('user-tag').className = 'tag ' + (curUser.isVip ? 'VIP' : curUser.role);
+                document.querySelectorAll('.dev-only').forEach(el => { el.style.display = (curUser.role === 'Developer') ? 'inline-block' : 'none'; });
+                if(curUser.role === 'Developer' || curUser.role === 'Admin' || curUser.role === 'Helper') {
+                    document.getElementById('dev-btn').classList.remove('hidden');
+                } else { document.getElementById('dev-btn').classList.add('hidden'); }
+            } else {
+                document.getElementById('nav-unauth').classList.remove('hidden');
+                document.getElementById('nav-auth').classList.add('hidden');
+            }
         }
 
-        // VIP Mesaj Göndərmə
-        function sendVipMessage() {
-            const input = document.getElementById('vip-msg-input');
-            if(!input.value || !socket) return;
-            socket.emit('send-vip-message', input.value);
-            input.value = '';
+        let isLogin = false;
+        function toggleAuth() {
+            isLogin = !isLogin;
+            document.getElementById('auth-title').innerText = isLogin ? 'GİRİŞ' : 'QEYDİYYAT';
+            document.getElementById('auth-reg').classList.toggle('hidden', isLogin);
+            document.getElementById('auth-log').classList.toggle('hidden', !isLogin);
+        }
+        
+        function register() {
+            let nick = document.getElementById('reg-nick').value;
+            let pass = document.getElementById('reg-pass').value;
+            if(!nick || !pass) return showToast("Doldurun!");
+            if(db.users.find(u => u.nick === nick)) return showToast("Bu Nick artıq var!");
+            let assignedRole = (nick.toLowerCase() === 'elnur') ? 'Developer' : 'Member';
+            
+            let nu = { id:'u'+Date.now(), nick, pass, role: assignedRole, balance:0, isVip:false, vipExpiry:null, photo:'', bio:'' };
+            db.users.push(nu); saveDb();
+            curUser = nu; saveCur();
+            closeModal('auth-modal'); updateNav(); showToast("Qeydiyyat uğurludur!");
+        }
+        
+        function login() {
+            let n = document.getElementById('log-nick').value;
+            let p = document.getElementById('log-pass').value;
+            let u = db.users.find(x => x.nick === n && x.pass === p);
+            if(u) { curUser = u; saveCur(); closeModal('auth-modal'); updateNav(); showToast("Giriş edildi!"); }
+            else showToast("Səhv Nick və ya Şifrə!");
+        }
+        function logout() { curUser = null; localStorage.removeItem('sg_cur'); nav('home'); updateNav(); }
+
+        function loadProfile() {
+            document.getElementById('prof-nick').value = curUser.nick;
+            document.getElementById('prof-img').value = curUser.photo || '';
+            document.getElementById('prof-bio').value = curUser.bio || '';
+            document.getElementById('prof-pass').value = '';
+            document.getElementById('prof-img-view').src = curUser.photo || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
         }
 
-        // Profil Yeniləmə
-        async function updateProfile() {
-            alert('Profil məlumatları yenilənmək üçün serverə göndərildi!');
+        function saveProfile() {
+            let dbU = db.users.find(u => u.id === curUser.id);
+            dbU.photo = document.getElementById('prof-img').value;
+            dbU.bio = document.getElementById('prof-bio').value;
+            let np = document.getElementById('prof-pass').value;
+            if(np) dbU.pass = np;
+            
+            saveDb(); curUser = dbU; saveCur(); loadProfile();
+            showToast("Profiliniz yeniləndi!");
         }
 
-        // Ticket Yaratmaq
-        async function createTicket() {
-            alert('Biletiniz adminlərə göndərildi!');
+        function buildCategories() {
+            let cats = [...new Set(db.products.map(p => p.cat))];
+            let filterDiv = document.getElementById('category-filters');
+            let html = `<button class="btn" onclick="renderProds('all')">TÜMÜ</button>`;
+            cats.forEach(c => { html += `<button class="btn" onclick="renderProds('${c}')">${c.toUpperCase()}</button>`; });
+            filterDiv.innerHTML = html;
         }
 
-        // VIP Satın Alma
-        async function buyVip() {
-            alert('5 AZN dəyərində VIP üzvlük aktiv edildi (1 Aylıq)!');
+        function renderProds(cat) {
+            let arr = cat === 'all' ? db.products : db.products.filter(p => p.cat === cat);
+            document.getElementById('products-grid').innerHTML = arr.map(p => `
+                <div class="card">
+                    <img src="${p.img || 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png'}">
+                    <h4 style="margin-bottom:10px;">${p.name}</h4>
+                    <div class="price">${p.price.toFixed(2)} AZN</div>
+                    <button class="btn" style="width:100%; margin-top:10px;" onclick="openBuy(${p.id})">AL</button>
+                </div>
+            `).join('');
         }
+
+        function buyVip() {
+            if(!curUser) return openModal('auth-modal');
+            if(curUser.isVip) return showToast("Zaten VIP-siniz!");
+            if(curUser.balance < 5) return showToast("Bakiye çatışmır! (5 AZN tələb olunur)");
+            
+            curUser.balance -= 5; 
+            curUser.isVip = true;
+            curUser.vipExpiry = Date.now() + (30 * 24 * 60 * 60 * 1000);
+            let dbU = db.users.find(u => u.id === curUser.id); 
+            dbU.balance = curUser.balance; dbU.isVip = true; dbU.vipExpiry = curUser.vipExpiry;
+            db.tickets.push({ id:'TKT-'+Date.now(), uId:curUser.id, uNick:curUser.nick, type:'Sistem', subj:'VIP Status Alındı', status:'Bağlı', msgs:[] });
+            saveDb(); saveCur(); updateNav(); showToast("TƏBRİKLƏR! 1 AYLIQ VIP ALINDI!");
+        }
+
+        function openBuy(id) {
+            if(!curUser) return openModal('auth-modal');
+            curBuy = db.products.find(p => p.id === id);
+            document.getElementById('buy-name').innerText = curBuy.name;
+            document.getElementById('buy-price').innerText = curBuy.price.toFixed(2) + " AZN";
+            document.getElementById('buy-label').innerText = curBuy.req + ":";
+            document.getElementById('buy-id').value = '';
+            openModal('buy-modal');
+        }
+
+        function confirmBuy() {
+            let reqId = document.getElementById('buy-id').value;
+            if(!reqId) return showToast("ID daxil edin!");
+            if(curUser.balance < curBuy.price) return showToast("Bakiye çatışmır!");
+            
+            let finalPrice = curBuy.price; let cb = 0;
+            if(curUser.isVip) { cb = finalPrice * 0.02; finalPrice -= cb; } 
+            
+            curUser.balance -= finalPrice;
+            let dbU = db.users.find(u => u.id === curUser.id); dbU.balance = curUser.balance;
+            let t = { id:'ORD-'+Math.floor(Math.random()*9000), uId:curUser.id, uNick:curUser.nick, type:'Sifariş', subj:`Sifariş: ${curBuy.name} | ID: ${reqId}`, status:'Açıq', msgs:[{s:'Sistem', role:'Sistem', t:`Sifariş yaradıldı. Ödəndi: ${finalPrice.toFixed(2)} AZN.`}] };
+            if(cb>0) t.msgs.push({s:'Sistem', role:'Sistem', t:`VIP Cashback: ${cb.toFixed(2)} AZN qənaət etdiniz!`});
+            
+            db.tickets.push(t); saveDb(); saveCur(); updateNav();
+            closeModal('buy-modal');
+            showToast("Sifariş Təsdiqləndi! Biletlərə baxın.");
+        }
+
+        function createTicket() {
+            let type = document.getElementById('t-type').value;
+            let msg = document.getElementById('t-msg').value;
+            if(!msg) return showToast("Açıqlama yazın!");
+            
+            let t = { id:'TKT-'+Math.floor(Math.random()*9000), uId:curUser.id, uNick:curUser.nick, type, subj:msg, status:'Açıq', msgs:[{s:curUser.nick, role:curUser.role, t:msg}] };
+            if(type === 'Bakiye Yükləmə') {
+                t.msgs.push({s:'Sistem', role:'Sistem', t:'Bakiye yükləmək üçün yalnız Developer ilə əlaqə saxlayın. Çeki göndərin.'});
+            }
+            if(type === 'Ad Dəyişmə') {
+                t.msgs.push({s:'Sistem', role:'Sistem', t:'Ad dəyişmə tələbiniz qeydə alındı. Adminlər baxacaq.'});
+            }
+            
+            db.tickets.push(t);
+            saveDb();
+            closeModal('new-ticket-modal'); renderUserTickets(); showToast("Bilet yaradıldı!");
+        }
+
+        function renderUserTickets() {
+            let arr = db.tickets.filter(t => t.uId === curUser.id).sort((a,b) => a.status === 'Bağlı' ? 1 : b.status === 'Bağlı' ? -1 : 0);
+            document.getElementById('user-tickets').innerHTML = arr.map(t => `
+                <div style="background:var(--input); border:1px solid var(--border); padding:15px; border-radius:5px; display:flex; justify-content:space-between; align-items:center; opacity: ${t.status==='Bağlı'?'0.6':'1'}">
+                    <div><b style="color:var(--primary);">${t.id}</b> - ${t.type} <br>
+                    <span style="font-size:0.8rem; color:var(--gray);">Durum: <span style="color:${t.status==='Açıq'?'var(--gold)':'var(--sec)'}">${t.status}</span></span></div>
+                    <button class="btn" onclick="openChat('${t.id}')">GİR</button>
+                </div>
+            `).join('');
+        }
+
+        function openChat(id) {
+            curTicket = db.tickets.find(t => t.id === id);
+            document.getElementById('chat-title').innerText = "Bilet: " + curTicket.id;
+            
+            let tool = document.getElementById('admin-bal-tool');
+            if((curUser.role === 'Developer' || curUser.role === 'Admin') && curTicket.type === 'Bakiye Yükləmə') { tool.classList.remove('hidden'); } 
+            else { tool.classList.add('hidden'); }
+            
+            renderChatMsgs();
+            openModal('chat-modal');
+        }
+
+        function renderChatMsgs() {
+            let box = document.getElementById('chat-box');
+            box.classList.remove('large');
+            box.innerHTML = curTicket.msgs.map(m => {
+                let isMe = m.s === curUser.nick;
+                let cls = isMe ? 'me' : 'them';
+                let imgTag = m.img ? `<br><img src="${m.img}" alt="Çek" style="max-width:200px;">` : '';
+                let roleColor = '#888';
+                if(m.role === 'Developer') roleColor = 'var(--sec)';
+                if(m.role === 'Admin') roleColor = 'var(--gold)';
+                if(m.role === 'Helper') roleColor = 'var(--primary)';
+                if(m.role === 'VIP') roleColor = '#8a2be2';
+                let roleTag = m.role ? `<span style="color:${roleColor}">[${m.role}]</span>` : '';
+                return `
+                    <div class="msg ${cls}">
+                        <div class="msg-sender">${roleTag} ${m.s}</div>
+                        <div>${m.t} ${imgTag}</div>
+                    </div>
+                `;
+            }).join('');
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function sendMsg() {
+            let txt = document.getElementById('chat-input').value;
+            let img = document.getElementById('chat-img-input').value;
+            if(!txt && !img) return;
+
+            if(curUser.role === 'Admin' && curTicket.type === 'Bakiye Yükləmə') {
+                let hasDevSpoken = curTicket.msgs.some(m => m.role === 'Developer');
+                if(!hasDevSpoken) return showToast("Öncə Developer müştəri ilə danışmalıdır!");
+            }
+            if(curUser.role === 'Helper' && curTicket.type === 'Bakiye Yükləmə') { return showToast("Helper yalnız dəstək biletlərinə baxa bilər!"); }
+
+            curTicket.msgs.push({ s: curUser.nick, role: curUser.role, t: txt, img: img });
+            saveDb(); document.getElementById('chat-input').value = ''; document.getElementById('chat-img-input').value = ''; renderChatMsgs();
+        }
+
+        function closeTicket() {
+            curTicket.status = 'Bağlı';
+            saveDb(); renderChatMsgs(); showToast("Bilet bağlandı!"); renderUserTickets(); 
+            if(!document.getElementById('sec-admin').classList.contains('hidden')) { adminView('tickets'); }
+        }
+
+        function adminView(v) {
+            let cont = document.getElementById('admin-content');
+            cont.innerHTML = '';
+            if(v === 'tickets') {
+                cont.innerHTML = `<input type="text" class="input" id="search-ticket" onkeyup="searchAdminTickets()" placeholder="Bilet Nömrəsi və ya Ad ilə axtar..."><div id="admin-t-list"></div>`;
+                searchAdminTickets();
+            }
+            else if(v === 'users' && curUser.role === 'Developer') {
+                cont.innerHTML = `<input type="text" class="input" id="search-user" onkeyup="searchUsers()" placeholder="Kullanıcı Adı axtar..."><div id="admin-u-list"></div>`;
+                searchUsers();
+            }
+            else if(v === 'products' && curUser.role === 'Developer') {
+                cont.innerHTML = `
+                    <button class="btn" onclick="openModal('add-prod-modal')">+ YENİ MƏHSUL / KATEQORİYA</button>
+                    <table style="margin-top:15px;"><tr><th>Kat</th><th>Ad</th><th>Qiymət</th><th>Sil</th></tr>
+                    ${db.products.map(p => `<tr><td>${p.cat}</td><td>${p.name}</td><td>${p.price.toFixed(2)}</td><td><button class="btn" style="padding:2px 5px" onclick="delProd(${p.id})">X</button></td></tr>`).join('')}
+                    </table>`;
+            }
+            else if(v === 'chat-dev' && (curUser.role === 'Developer' || curUser.role === 'Admin')) { renderGenChat('devAdmin', 'Developer & Admin Çatı'); }
+            else if(v === 'chat-helper') { renderGenChat('helperAdmin', 'Helper & Admin/Dev Çatı'); }
+            else if(v === 'chat-vip') { renderGenChat('vipChat', 'VIP Üzvlər Çatı'); }
+        }
+
+        function searchAdminTickets() {
+            let val = document.getElementById('search-ticket').value.toLowerCase();
+            let arr = db.tickets.filter(t => t.id.toLowerCase().includes(val) || t.uNick.toLowerCase().includes(val)).sort((a,b) => a.status === 'Bağlı' ? 1 : b.status === 'Bağlı' ? -1 : 0);
+            document.getElementById('admin-t-list').innerHTML = arr.map(t => `
+                <div style="background:var(--bg); margin-bottom:5px; padding:10px; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; opacity: ${t.status==='Bağlı'?'0.6':'1'}">
+                    <div><b>${t.id}</b> - ${t.uNick} - ${t.type} [${t.status}]</div>
+                    <button class="btn" style="padding:5px 10px;" onclick="openChat('${t.id}')">AÇ</button>
+                </div>
+            `).join('');
+        }
+
+        function searchUsers() {
+            let val = document.getElementById('search-user').value.toLowerCase();
+            let arr = db.users.filter(u => u.nick.toLowerCase().includes(val));
+            document.getElementById('admin-u-list').innerHTML = `
+                <table><tr><th>Nick</th><th>Bakiye</th><th>Yetki</th><th>Dəyiş</th></tr>
+                ${arr.map(u => `
+                    <tr><td>${u.nick} ${u.isVip?'(VIP)':''}</td><td>${u.balance.toFixed(2)}</td>
+                        <td><select id="role-${u.id}" style="background:var(--input); color:var(--text);">
+                            <option value="Member" ${u.role==='Member'?'selected':''}>Member</option>
+                            <option value="Helper" ${u.role==='Helper'?'selected':''}>Helper</option>
+                            <option value="Admin" ${u.role==='Admin'?'selected':''}>Admin</option>
+                            <option value="Developer" ${u.role==='Developer'?'selected':''}>Developer</option>
+                        </select></td>
+                        <td><button class="btn" style="padding:2px 5px" onclick="updateRole('${u.id}')">SAXLA</button></td>
+                    </tr>
+                `).join('')}
+                </table>
+            `;
+        }
+
+        function updateRole(uid) {
+            let r = document.getElementById('role-'+uid).value;
+            let u = db.users.find(x => x.id === uid); u.role = r; saveDb(); showToast("Yetki dəyişdirildi!");
+        }
+
+        function adminAddBal() {
+            let amt = parseFloat(document.getElementById('admin-add-bal').value);
+            if(!amt || amt <= 0) return;
+            let target = db.users.find(u => u.id === curTicket.uId); target.balance += amt;
+            curTicket.msgs.push({ s:'Sistem', role:'Sistem', t:`${curUser.nick} tərəfindən hesaba ${amt.toFixed(2)} AZN yükləndi.`});
+            saveDb(); document.getElementById('admin-add-bal').value = ''; renderChatMsgs(); showToast("Bakiye yükləndi!");
+        }
+
+        function saveProduct() {
+            let cat = document.getElementById('ap-cat').value;
+            let name = document.getElementById('ap-name').value;
+            let price = parseFloat(document.getElementById('ap-price').value); let req = document.getElementById('ap-label').value; let img = document.getElementById('ap-img').value;
+            if(!cat || !name || !price) return showToast("Doldurun!");
+            db.products.push({ id:Date.now(), cat, name, price, req, img }); saveDb();
+            closeModal('add-prod-modal'); adminView('products');
+            showToast("Məhsul Əlavə edildi!"); buildCategories(); renderProds('all');
+        }
+        function delProd(id) { db.products = db.products.filter(p => p.id !== id);
+            saveDb(); adminView('products'); buildCategories(); renderProds('all'); }
+
+        let currentGenChat = '';
+        function renderGenChat(type, title) {
+            if(type === 'vipChat' && !curUser.isVip && curUser.role !== 'Developer' && curUser.role !== 'Admin') return showToast("Bu chat yalnız VIP və yuxarı yetkililər üçündür.");
+            currentGenChat = type;
+            let cont = document.getElementById('admin-content');
+            cont.innerHTML = `
+                <h3 class="raj" style="color:var(--primary); margin-bottom:10px;">${title}</h3>
+                <div class="chat-box large" id="gen-chat-box"></div>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="gen-chat-input" class="input" style="margin:0; flex:1;" placeholder="Mesaj yaz...">
+                    <button class="btn" onclick="sendGenMsg()">></button>
+                </div>
+            `;
+            updateGenChatMsgs();
+        }
+
+        function updateGenChatMsgs() {
+            if(!currentGenChat) return;
+            let box = document.getElementById('gen-chat-box'); if(!box) return;
+            box.innerHTML = db.generalChats[currentGenChat].map(m => {
+                let roleColor = '#888';
+                if(m.role === 'Developer') roleColor = 'var(--sec)';
+                if(m.role === 'Admin') roleColor = 'var(--gold)';
+                if(m.role === 'Helper') roleColor = 'var(--primary)';
+                if(m.role === 'VIP') roleColor = '#8a2be2';
+                return `
+                <div class="msg ${m.s === curUser.nick ? 'me' : 'them'}">
+                    <div class="msg-sender"><span style="color:${roleColor}">[${m.role}]</span> ${m.s}</div>
+                    <div>${m.t}</div>
+                </div>
+                `;
+            }).join('');
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function sendGenMsg() {
+            let txt = document.getElementById('gen-chat-input').value;
+            if(!txt) return;
+            let roleToDisplay = curUser.isVip && currentGenChat === 'vipChat' && curUser.role === 'Member' ? 'VIP' : curUser.role;
+            db.generalChats[currentGenChat].push({ s: curUser.nick, role: roleToDisplay, t: txt });
+            saveDb(); document.getElementById('gen-chat-input').value = ''; updateGenChatMsgs();
+        }
+
+        window.onload = () => { updateNav(); buildCategories(); renderProds('all'); };
     </script>
 </body>
 </html>
