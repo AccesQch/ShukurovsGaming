@@ -1,133 +1,55 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const http = require('http');
-const { Server } = require('socket.io');
-const bcrypt = require('bcryptjs');
-const cors = require('cors');
-const cron = require('cron');
+// 1. ÇAT GÖNDƏRMƏ FİXİ:
+function sendGenMsg() {
+    let inputEl = document.getElementById('gen-chat-input');
+    if (!inputEl) return;
+    let txt = inputEl.value.trim();
+    if (!txt) return;
 
-const app = express();
-const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: '*' } });
+    // Hansı chatda olduğumuzu yoxlayırıq
+    let roleToDisplay = curUser.isVip && currentGenChat === 'vipChat' && curUser.role === 'Member' ? 'VIP' : curUser.role;
+    
+    // Mesajı bazaya push edirik
+    db.generalChats[currentGenChat].push({ s: curUser.nick, role: roleToDisplay, t: txt });
+    saveDb(); 
+    inputEl.value = ''; 
+    updateGenChatMsgs();
+}
 
-app.use(express.json());
-app.use(cors());
+// 2. BİLET GÖRÜNMƏZLIYI FİXİ:
+function renderUserTickets() {
+    let box = document.getElementById('user-tickets');
+    let arr = [];
 
-// --- MODELLƏR ---
-const User = mongoose.model('User', new mongoose.Schema({
-    username: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    role: { type: String, enum: ['Member', 'VIP', 'Helper', 'Admin', 'Developer'], default: 'Member' },
-    profilePhoto: { type: String, default: 'default-avatar.png' },
-    bio: { type: String, default: 'Mən bu saytın yeni üzvüyəm.' },
-    vipExpiry: { type: Date, default: null },
-    createdAt: { type: Date, default: Date.now }
-}));
+    // Əgər istifadəçi Admin və ya Dev-dirsə, bütün biletləri görsün
+    if(curUser.role === 'Developer' || curUser.role === 'Admin') {
+        arr = db.tickets;
+    } else {
+        // Member sadəcə öz biletlərini görsün
+        arr = db.tickets.filter(t => t.uId === curUser.id);
+    }
+    
+    // Sıralama (Açıq olanlar üstdə)
+    arr.sort((a,b) => (a.status === 'Açıq' ? -1 : 1));
 
-const Ticket = mongoose.model('Ticket', new mongoose.Schema({
-    authorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    type: { type: String, enum: ['General', 'NameChange', 'Support'], default: 'General' },
-    content: { type: String, required: true },
-    status: { type: String, enum: ['Open', 'InProgress', 'Closed'], default: 'Open' },
-    createdAt: { type: Date, default: Date.now }
-}));
+    if (arr.length === 0) box.innerHTML = '<p>Bilet yoxdur.</p>';
+    else box.innerHTML = arr.map(t => `
+        <div class="ticket-item">
+            <b>${t.id} - ${t.uNick}</b> | ${t.type} | 
+            <span style="color:${t.status==='Açıq'?'green':'red'}">${t.status}</span>
+            <button onclick="openChat('${t.id}')">Giriş</button>
+        </div>
+    `).join('');
+}
 
-// --- CRON JOB (VIP Yoxlama) ---
-const checkVipStatus = new cron.CronJob('0 * * * *', async () => {
-    const now = new Date();
-    await User.updateMany({ role: 'VIP', vipExpiry: { $lte: now } }, { $set: { role: 'Member', vipExpiry: null } });
-});
-checkVipStatus.start();
-
-// --- API-LƏR ---
-app.get('/', (req, res) => { res.send('Elnur Pro Server Aktivdir!'); });
-
-app.post('/api/register', async (req, res) => {
-    try {
-        const { username, password } = req.body;
-        const hashedPassword = await bcrypt.hash(password, 10);
-        let userRole = username.toLowerCase() === 'elnur' ? 'Developer' : 'Member';
-        const newUser = new User({ username, password: hashedPassword, role: userRole });
-        await newUser.save();
-        res.status(201).json({ message: 'Uğurlu', role: userRole });
-    } catch (err) { res.status(400).json({ error: 'Xəta' }); }
-});
-
-app.put('/api/profile/update', async (req, res) => {
-    const { userId, newPassword, profilePhoto, bio } = req.body;
-    try {
-        let updateData = { profilePhoto, bio };
-        if (newPassword) updateData.password = await bcrypt.hash(newPassword, 10);
-        await User.findByIdAndUpdate(userId, updateData);
-        res.json({ message: 'Yeniləndi' });
-    } catch (err) { res.status(500).json({ error: 'Xəta' }); }
-});
-
-app.post('/api/tickets/create', async (req, res) => {
-    const { userId, type, content } = req.body;
-    try {
-        const newTicket = new Ticket({ authorId: userId, type, content });
-        await newTicket.save();
-        io.to('staff-room').emit('new-ticket', newTicket);
-        res.json({ message: 'Bilet yaradıldı' });
-    } catch (err) { res.status(500).json({ error: 'Xəta' }); }
-});
-
-app.post('/api/buy-vip', async (req, res) => {
-    const { userId, paymentAmount } = req.body;
-    if (paymentAmount < 5) return res.status(400).json({ error: 'Qiymət 5 AZN-dir' });
-    try {
-        const expiryDate = new Date();
-        expiryDate.setDate(expiryDate.getDate() + 30);
-        await User.findByIdAndUpdate(userId, { role: 'VIP', vipExpiry: expiryDate });
-        res.json({ message: 'VIP olundu', expiryDate });
-    } catch (err) { res.status(500).json({ error: 'Xəta' }); }
-});
-
-// --- CHAT (SOCKET.IO) ---
-io.on('connection', (socket) => {
-    socket.on('join-server', async ({ userId }) => {
-        try {
-            const user = await User.findById(userId);
-            if (!user) return;
-            socket.user = user;
-            if (['Admin', 'Helper', 'Developer'].includes(user.role)) socket.join('staff-room');
-            if (['VIP', 'Admin', 'Helper', 'Developer'].includes(user.role)) socket.join('vip-chat');
-            socket.join('general-chat');
-        } catch (e) {}
-    });
-
-    socket.on('send-general-message', (content) => {
-        if (!socket.user) return;
-        io.to('general-chat').emit('receive-general-message', {
-            username: socket.user.username,
-            roleTag: `[${socket.user.role}]`,
-            text: content,
-            timestamp: new Date()
-        });
-    });
-
-    socket.on('send-vip-message', (content) => {
-        if (!socket.user || !['VIP', 'Admin', 'Helper', 'Developer'].includes(socket.user.role)) return;
-        io.to('vip-chat').emit('receive-vip-message', {
-            username: socket.user.username,
-            roleTag: `[${socket.user.role}]`,
-            text: content,
-            timestamp: new Date()
-        });
-    });
-});
-
-// --- MONGOOSE BAĞLANTISI ---
-const mongoURI = "mongodb+srv://elnursukurlu703_db_user:Elnur5050@elnur.vp5veyx.mongodb.net/elnur_pro_site?retryWrites=true&w=majority&appName=Elnur";
-
-mongoose.connect(mongoURI)
-.then(() => {
-    console.log('MongoDB Uğurlu');
-    const PORT = process.env.PORT || 3000;
-    server.listen(PORT, () => console.log('Server işləyir'));
-})
-.catch(err => {
-    console.log(err);
-    process.exit(1);
-});
+// 3. ADMIN PANEL BİLET FİXİ:
+function searchAdminTickets() {
+    let val = document.getElementById('search-ticket').value.toLowerCase();
+    // Bütün biletləri çəkir (Developer burada hər şeyi görəcək)
+    let arr = db.tickets.filter(t => t.id.toLowerCase().includes(val) || t.uNick.toLowerCase().includes(val));
+    document.getElementById('admin-t-list').innerHTML = arr.map(t => `
+        <div class="admin-ticket">
+            <span>${t.id} - ${t.uNick}</span>
+            <button onclick="openChat('${t.id}')">Bax</button>
+        </div>
+    `).join('');
+}
