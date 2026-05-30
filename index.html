@@ -1050,6 +1050,41 @@
             buildCategories(); 
             renderProds('all'); 
         };
+// --- SİSTEMİ DÜZƏLDƏN YEKUN SİNXRONİZASİYA BLOKU ---
+
+// 1. Yeni qeydiyyatdan keçənlərin görünməsi üçün:
+function registerUserFixed(newUser) {
+    if(!db.users) db.users = [];
+    db.users.push(newUser);
+    saveDb();
+    console.log("Yeni istifadəçi qeydiyyata alındı:", newUser.nick);
+    if(typeof searchUsers === 'function') searchUsers();
+}
+
+// 2. Yeni biletlərin dərhal siyahıda görünməsi üçün:
+function createTicketFixed(ticket) {
+    if(!db.tickets) db.tickets = [];
+    db.tickets.push(ticket);
+    saveDb();
+    console.log("Yeni bilet yaradıldı:", ticket.id);
+    if(typeof renderUserTickets === 'function') renderUserTickets();
+    if(typeof adminView === 'function') adminView('tickets');
+}
+
+// 3. Sayt hər açıldıqda köhnə məlumatları yeniləmək üçün:
+window.addEventListener('load', function() {
+    console.log("Sistem təmizləndi və yükləndi.");
+    if(typeof renderUserTickets === 'function') renderUserTickets();
+    if(typeof updateNav === 'function') updateNav();
+});
+
+// 4. Adminlər üçün bazanı sıfırlamaq (Lazım olarsa konsola 'resetDB()' yaz):
+function resetDB() {
+    if(confirm("Bütün datanı silmək istəyirsən?")) {
+        localStorage.clear();
+        location.reload();
+    }
+}
     </script>
 </body>
 </html>
