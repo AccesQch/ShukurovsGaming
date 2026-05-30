@@ -3,83 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shukurovs Gaming | Premium E-Pin</title>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>Shukurovs Gaming | Premium E-Pin & Community</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --bg: #07070a; --panel: #12121a; --primary: #00e5ff; --sec: #ff0055; --gold: #ffd700; --text: #fff; --gray: #888; --border: #333; --input: #0a0a0f; }
-        body.light-mode { --bg: #f4f4f9; --panel: #ffffff; --text: #1a1a24; --border: #ddd; --input: #eee; --primary: #008c9e; --sec: #d9004c; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
-        body { background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; transition: 0.3s; }
-        .bg-fx { position: fixed; top:0; left:0; width:100%; height:100%; background: radial-gradient(circle at 50% 0%, rgba(0,229,255,0.05) 0%, transparent 50%); z-index: -1; }
-        body.light-mode .bg-fx { background: radial-gradient(circle at 50% 0%, rgba(0,140,158,0.1) 0%, transparent 50%); }
+        :root { --bg: #07070a; --panel: #12121a; --panel-hover: #1a1a24; --primary: #00e5ff; --sec: #ff0055; --gold: #ffd700; --text: #fff; --gray: #aaa; --border: #333; --input: #0a0a0f; --success: #00e676; }
+        body.light-mode { --bg: #f4f4f9; --panel: #ffffff; --panel-hover: #f0f0f5; --text: #1a1a24; --border: #ddd; --input: #eee; --gray: #555; --primary: #008c9e; --sec: #d9004c; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; transition: background 0.3s, border-color 0.3s; }
+        body { background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
 
-        h1, h2, h3, .raj { font-family: 'Rajdhani', sans-serif; text-transform: uppercase; }
-        .btn { padding: 10px 20px; border: 1px solid var(--primary); background: transparent; color: var(--primary); cursor: pointer; font-weight: bold; border-radius: 5px; transition: 0.3s; text-transform: uppercase; }
-        .btn:hover { background: var(--primary); color: #fff; box-shadow: 0 0 15px var(--primary); }
-        .btn-gold { border-color: var(--gold); color: var(--gold); }
-        .btn-gold:hover { background: var(--gold); color: #000; box-shadow: 0 0 15px var(--gold); }
+        .bg-fx { position: fixed; top:0; left:0; width:100%; height:100%; background: radial-gradient(circle at 50% 0%, rgba(0,229,255,0.05) 0%, transparent 60%); z-index: -1; pointer-events: none; }
+        body.light-mode .bg-fx { background: radial-gradient(circle at 50% 0%, rgba(0,140,158,0.1) 0%, transparent 60%); }
+
+        h1, h2, h3, .raj { font-family: 'Rajdhani', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .btn { padding: 10px 20px; border: 1px solid var(--primary); background: rgba(0,229,255,0.05); color: var(--primary); cursor: pointer; font-weight: bold; border-radius: 6px; text-transform: uppercase; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 15px rgba(0,229,255,0.4); transform: translateY(-2px); }
+        .btn-gold { border-color: var(--gold); color: var(--gold); background: rgba(255,215,0,0.05); }
+        .btn-gold:hover { background: var(--gold); color: #000; box-shadow: 0 0 15px rgba(255,215,0,0.4); }
+        .btn-sec { border-color: var(--sec); color: var(--sec); background: rgba(255,0,85,0.05); }
+        .btn-sec:hover { background: var(--sec); color: #fff; box-shadow: 0 0 15px rgba(255,0,85,0.4); }
+        
+        .input { width: 100%; padding: 12px; background: var(--input); border: 1px solid var(--border); color: var(--text); border-radius: 6px; margin-top: 5px; margin-bottom: 15px; font-size: 0.95rem; }
+        .input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 8px rgba(0,229,255,0.2); }
         .hidden { display: none !important; }
-        .input { width: 100%; padding: 10px; background: var(--input); border: 1px solid var(--border); color: var(--text); border-radius: 5px; margin-top: 5px; margin-bottom: 15px; }
-        .input:focus { border-color: var(--primary); outline: none; }
-        
-        nav { display: flex; justify-content: space-between; padding: 20px 40px; background: var(--panel); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
-        .logo { font-size: 1.5rem; font-weight: 900; color: var(--primary); cursor: pointer; text-shadow: 0 0 10px var(--primary); }
-        .tag { padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; background: var(--border); color: var(--text); }
-        .tag.Developer { background: var(--sec); color: white; } .tag.Admin { background: var(--gold); color: black; } .tag.Helper { background: var(--primary); color: black; } .tag.VIP { background: #8a2be2; color: white; box-shadow: 0 0 10px #8a2be2; }
-        
-        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; flex: 1; width: 100%; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-        
-        .card { background: var(--panel); padding: 20px; border: 1px solid var(--border); border-radius: 10px; text-align: center; position: relative; transition: 0.3s; }
-        .card:hover { border-color: var(--primary); transform: translateY(-5px); }
-        .card img { width: 80px; height: 80px; object-fit: contain; margin-bottom: 10px; border-radius: 50%; }
-        .price { color: var(--gold); font-size: 1.5rem; font-weight: 900; }
 
-        .vip-banner { background: linear-gradient(45deg, #1a0033, #4b0082); border: 1px solid #8a2be2; padding: 20px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; color: white; box-shadow: 0 0 20px rgba(138,43,226,0.4); }
-        .vip-features { font-size: 0.9rem; color: #d4a5ff; margin-top: 5px; }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: rgba(18,18,26,0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 15px; }
+        body.light-mode nav { background: rgba(255,255,255,0.9); }
+        .logo { font-size: 1.8rem; font-weight: 900; color: var(--primary); cursor: pointer; text-shadow: 0 0 15px rgba(0,229,255,0.5); font-family: 'Rajdhani', sans-serif; letter-spacing: 2px; }
         
-        .modal-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; }
-        .modal { background: var(--panel); padding: 30px; border-radius: 15px; border: 1px solid var(--primary); width: 450px; max-width: 90%; max-height: 85vh; overflow-y: auto; color: var(--text); }
+        .search-bar { display: flex; align-items: center; background: var(--input); border: 1px solid var(--border); border-radius: 20px; padding: 5px 15px; flex: 1; max-width: 300px; }
+        .search-bar input { background: transparent; border: none; color: var(--text); padding: 5px; width: 100%; outline: none; }
         
-        .chat-box { height: 400px; background: var(--input); overflow-y: auto; padding: 15px; border: 1px solid var(--border); margin-bottom: 10px; display: flex; flex-direction: column; gap: 10px; border-radius: 5px; }
-        .msg { padding: 10px; border-radius: 10px; max-width: 85%; font-size: 0.9rem; word-wrap: break-word; }
-        .msg.me { align-self: flex-end; background: var(--primary); color: #000; }
-        .msg.them { align-self: flex-start; background: #2a2a35; color: #fff; }
-        .msg-sender { font-size: 0.75rem; font-weight: bold; margin-bottom: 5px; opacity: 0.9; }
-        .msg img { max-width: 100%; border-radius: 5px; margin-top: 5px; }
+        .tag { padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+        .tag.Developer { background: var(--sec); color: white; box-shadow: 0 0 10px var(--sec); } 
+        .tag.Admin { background: var(--gold); color: black; box-shadow: 0 0 10px var(--gold); } 
+        .tag.Helper { background: var(--primary); color: black; } 
+        .tag.VIP { background: #8a2be2; color: white; box-shadow: 0 0 10px #8a2be2; }
+        .tag.Member { background: var(--border); color: var(--text); }
+
+        .container { max-width: 1300px; margin: 30px auto; padding: 0 20px; flex: 1; width: 100%; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+        .card { background: var(--panel); padding: 25px 20px; border: 1px solid var(--border); border-radius: 12px; text-align: center; position: relative; overflow: hidden; }
+        .card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .card img { width: 90px; height: 90px; object-fit: contain; margin-bottom: 15px; border-radius: 10px; }
+        .price { color: var(--gold); font-size: 1.6rem; font-weight: 900; margin: 10px 0; font-family: 'Rajdhani', sans-serif; }
+
+        .vip-banner { background: linear-gradient(135deg, #1a0033, #4b0082); border: 1px solid #8a2be2; padding: 25px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; color: white; box-shadow: 0 0 25px rgba(138,43,226,0.3); flex-wrap: wrap; gap: 20px; }
+        .vip-features { font-size: 0.95rem; color: #d4a5ff; margin-top: 10px; font-weight: 500; }
+
+        .modal-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: 0.3s; }
+        .modal-bg.show { opacity: 1; visibility: visible; }
+        .modal { background: var(--panel); padding: 30px; border-radius: 15px; border: 1px solid var(--border); width: 500px; max-width: 95%; max-height: 90vh; overflow-y: auto; color: var(--text); transform: scale(0.9); transition: 0.3s; position: relative; }
+        .modal-bg.show .modal { transform: scale(1); border-color: var(--primary); }
+        .close-modal { position: absolute; top: 15px; right: 20px; cursor: pointer; color: var(--gray); font-size: 1.5rem; }
+        .close-modal:hover { color: var(--sec); }
+
+        .chat-wrapper { display: flex; flex-direction: column; height: 500px; }
+        .chat-box { flex: 1; background: var(--input); overflow-y: auto; padding: 15px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 12px; border-radius: 8px; margin-bottom: 15px; }
+        .msg { padding: 12px 15px; border-radius: 12px; max-width: 85%; font-size: 0.95rem; word-wrap: break-word; position: relative; }
+        .msg.me { align-self: flex-end; background: rgba(0, 229, 255, 0.1); border: 1px solid var(--primary); border-bottom-right-radius: 2px; }
+        .msg.them { align-self: flex-start; background: var(--panel-hover); border: 1px solid var(--border); border-bottom-left-radius: 2px; }
+        .msg-sender { font-size: 0.8rem; font-weight: bold; margin-bottom: 5px; font-family: 'Rajdhani', sans-serif; letter-spacing: 0.5px; }
+        .msg img { max-width: 100%; border-radius: 8px; margin-top: 8px; border: 1px solid var(--border); }
         
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { padding: 12px 10px; border-bottom: 1px solid var(--border); text-align: left; font-size: 0.9rem; }
+        th, td { padding: 15px 10px; border-bottom: 1px solid var(--border); text-align: left; font-size: 0.95rem; }
+        th { background: var(--input); color: var(--primary); font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; }
+        tr:hover td { background: var(--panel-hover); }
         
-        #toast { position: fixed; bottom: 20px; right: 20px; padding: 15px 25px; background: var(--primary); color: #000; font-weight: bold; border-radius: 5px; z-index: 9999; transform: translateX(200%); transition: 0.3s; }
+        #toast { position: fixed; bottom: 30px; right: 30px; padding: 15px 25px; background: var(--primary); color: #000; font-weight: bold; border-radius: 8px; z-index: 9999; transform: translateX(150%); transition: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
         #toast.show { transform: translateX(0); }
 
-        footer { background: var(--panel); border-top: 1px solid var(--border); padding: 30px; text-align: center; margin-top: auto; }
-        .footer-content { display: flex; flex-direction: column; gap: 10px; align-items: center; }
-        .secure-badge { color: #00e676; font-weight: bold; font-size: 1.2rem; display: flex; align-items: center; gap: 5px; margin-top: 10px; }
+        footer { background: var(--panel); border-top: 1px solid var(--border); padding: 40px 20px; text-align: center; margin-top: auto; }
+        .footer-content { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+        .secure-badge { color: var(--success); font-weight: bold; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; margin-top: 15px; background: rgba(0,230,118,0.1); padding: 10px 20px; border-radius: 30px; border: 1px solid var(--success); }
         
-        .profile-img-preview { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); margin: 0 auto 15px; display: block; }
+        /* Profile Enhancements */
+        .cover-photo { width: 100%; height: 150px; background: url('https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3') center/cover; border-radius: 10px 10px 0 0; margin-bottom: -50px; border: 1px solid var(--border); border-bottom: none; }
+        .profile-img-preview { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid var(--panel); box-shadow: 0 0 15px var(--primary); margin: 0 auto 15px; display: block; position: relative; z-index: 2; background: var(--input); }
+        
+        .user-list-item { display: flex; align-items: center; justify-content: space-between; padding: 15px; background: var(--input); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; cursor: pointer; }
+        .user-list-item:hover { border-color: var(--primary); }
+        .user-info-flex { display: flex; align-items: center; gap: 15px; }
+        .user-info-flex img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
+
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; overflow-x: auto; }
+        .tab-btn { background: transparent; border: none; color: var(--gray); font-family: 'Rajdhani', sans-serif; font-size: 1.2rem; font-weight: bold; cursor: pointer; padding: 5px 10px; }
+        .tab-btn.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
+
+        @media (max-width: 768px) {
+            nav { flex-direction: column; text-align: center; }
+            .search-bar { max-width: 100%; width: 100%; margin-top: 10px; }
+            #nav-auth, #nav-unauth { justify-content: center; width: 100%; margin-top: 10px; }
+            .vip-banner { flex-direction: column; text-align: center; }
+        }
     </style>
 </head>
 <body>
     <div class="bg-fx"></div>
     
     <nav>
-        <div class="logo" onclick="nav('home')">SHUKUROVS GAMING</div>
-        <div id="nav-unauth" style="display: flex; gap:10px;">
-            <button class="btn btn-gold" onclick="openModal('settings-modal')"><i class="fas fa-cog"></i></button>
-            <button class="btn" onclick="openModal('auth-modal')" data-t="loginBtn">Giriş / Qeydiyyat</button>
+        <div class="logo" onclick="navPage('home')">SHUKUROVS GAMING</div>
+        
+        <div class="search-bar">
+            <i class="fas fa-search" style="color:var(--gray)"></i>
+            <input type="text" id="global-search" placeholder="İstifadəçi axtar..." onkeypress="handleGlobalSearch(event)" data-i18n="search_placeholder">
         </div>
-        <div id="nav-auth" class="hidden" style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+
+        <div id="nav-unauth" style="display: flex; gap:10px;">
+            <button class="btn btn-gold" onclick="openModal('settings-modal')"><i class="fas fa-globe"></i> / <i class="fas fa-cog"></i></button>
+            <button class="btn" onclick="openModal('auth-modal')" data-i18n="login_btn"><i class="fas fa-sign-in-alt"></i> Giriş / Qeydiyyat</button>
+        </div>
+        
+        <div id="nav-auth" class="hidden" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
             <span id="user-tag" class="tag"></span>
-            <span id="user-nick" style="font-weight:bold; cursor:pointer;" onclick="nav('profile')"></span>
-            <span class="price raj" style="font-size:1.2rem;" id="user-bal">0.00 AZN</span>
-            <button class="btn btn-gold" onclick="nav('support')">+ Bakiye / Dəstək</button>
-            <button class="btn" onclick="nav('profile')"><i class="fas fa-user"></i> Profil</button>
-            <button id="dev-btn" class="btn hidden" style="border-color:var(--sec); color:var(--sec);" onclick="nav('admin')">PANEL</button>
-            <button class="btn btn-gold" onclick="openModal('settings-modal')"><i class="fas fa-cog"></i></button>
-            <button class="btn" style="border-color:var(--border); color:var(--text);" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+            <span id="user-nick" style="font-weight:bold; cursor:pointer; color:var(--primary);" onclick="navPage('profile')"></span>
+            <span class="price raj" style="font-size:1.3rem; margin: 0 10px;" id="user-bal">0.00 AZN</span>
+            
+            <button class="btn btn-gold" onclick="navPage('support')" title="Dəstək & Bakiye"><i class="fas fa-wallet"></i> / <i class="fas fa-headset"></i></button>
+            <button class="btn" onclick="navPage('profile')" title="Profil"><i class="fas fa-user"></i></button>
+            <button id="dev-btn" class="btn hidden" style="border-color:var(--sec); color:var(--sec);" onclick="navPage('admin')"><i class="fas fa-terminal"></i> PANELLƏR</button>
+            <button class="btn btn-gold" onclick="openModal('settings-modal')" title="Ayarlar"><i class="fas fa-cog"></i></button>
+            <button class="btn" style="border-color:var(--border); color:var(--text);" onclick="logout()" title="Çıxış"><i class="fas fa-sign-out-alt"></i></button>
         </div>
     </nav>
 
@@ -87,110 +138,187 @@
         <div id="sec-home">
             <div class="vip-banner">
                 <div>
-                    <h2 class="raj" style="color:var(--gold);"><i class="fas fa-crown"></i> VIP STATUS AL (AYLIQ)</h2>
-                    <p data-t="vipDesc" style="font-size:0.95rem;">Hər alışda 2% cashback, xüsusi tag, VIP Chat-a giriş və öncəlikli dəstək!</p>
-                    <div class="vip-features">✨ Xüsusi VIP Çatı | ⚡ Anında Sifariş Təsdiqi | 🎁 1 Aylıq Limitsiz VIP</div>
+                    <h2 class="raj" style="color:var(--gold); font-size: 2rem;"><i class="fas fa-crown"></i> <span data-i18n="vip_title">VIP STATUS AL (AYLIQ)</span></h2>
+                    <p style="font-size:1.05rem; margin-top:5px;" data-i18n="vip_desc">Hər alışda 2% cashback, xüsusi tag, VIP Chat-a giriş və öncəlikli dəstək!</p>
+                    <div class="vip-features"><i class="fas fa-check-circle"></i> Xüsusi VIP Çatı | <i class="fas fa-bolt"></i> Anında Sifariş Təsdiqi | <i class="fas fa-gift"></i> 1 Aylıq Limitsiz VIP</div>
                 </div>
-                <button class="btn btn-gold" style="font-size: 1.1rem; padding: 15px 30px;" onclick="buyVip()">VIP AL (5 AZN)</button>
+                <button class="btn btn-gold" style="font-size: 1.2rem; padding: 15px 40px;" onclick="buyVip()"><i class="fas fa-shopping-cart"></i> <span data-i18n="vip_buy">VIP AL (5 AZN)</span></button>
             </div>
-            <div id="category-filters" style="margin-bottom: 20px; display:flex; gap:10px; overflow-x:auto; padding-bottom: 10px;"></div>
+            
+            <div id="category-filters" style="margin-bottom: 25px; display:flex; gap:10px; overflow-x:auto; padding-bottom: 10px;"></div>
             <div class="grid" id="products-grid"></div>
         </div>
 
         <div id="sec-profile" class="hidden">
-            <h2 class="raj" style="color:var(--primary); margin-bottom:20px;"><i class="fas fa-user-circle"></i> Mənim Profilim</h2>
-            <div style="background:var(--panel); padding:30px; border-radius:10px; border:1px solid var(--border); max-width:600px; margin:0 auto;">
-                <img id="prof-img-view" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="profile-img-preview">
-                <p style="text-align:center; color:var(--sec); font-size:0.8rem; margin-bottom:15px;">Adınızı dəyişmək üçün dəstək xidmətinə (Ticket) müraciət edin.</p>
-                <label>Nickname:</label>
-                <input type="text" id="prof-nick" class="input" disabled>
-                <label>Profil Şəkli (URL):</label>
-                <input type="text" id="prof-img" class="input" placeholder="https://...">
-                <label>Haqqımda (Bio):</label>
-                <textarea id="prof-bio" class="input" rows="3" placeholder="Özünüz haqqında yazın..."></textarea>
-                <label>Yeni Şifrə (Dəyişmək istəyirsinizsə):</label>
-                <input type="password" id="prof-pass" class="input" placeholder="***">
-                <button class="btn btn-gold" style="width:100%; margin-top:10px;" onclick="saveProfile()">PROFİLİ YENİLƏ</button>
+            <h2 class="raj" style="color:var(--primary); margin-bottom:20px; font-size:2rem;"><i class="fas fa-user-edit"></i> <span data-i18n="my_profile">Mənim Profilim</span></h2>
+            <div style="background:var(--panel); border-radius:12px; border:1px solid var(--border); max-width:800px; margin:0 auto; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                <div class="cover-photo" id="prof-cover-view"></div>
+                <div style="padding: 20px 40px 40px;">
+                    <img id="prof-img-view" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="profile-img-preview">
+                    
+                    <div style="text-align:center; margin-bottom:20px;">
+                        <h3 class="raj" style="font-size:1.8rem; color:var(--text);"><span id="prof-display-nick"></span> <span id="prof-display-tag" class="tag" style="vertical-align: middle;"></span></h3>
+                        <p style="color:var(--sec); font-size:0.85rem; margin-top:5px;" data-i18n="name_change_info">Adınızı dəyişmək üçün Dəstək (Ticket) xidmətinə müraciət edin.</p>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <label data-i18n="prof_img_url">Profil Şəkli (URL):</label>
+                            <input type="text" id="prof-img" class="input" placeholder="https://...">
+                        </div>
+                        <div>
+                            <label data-i18n="cover_img_url">Arxa Plan Şəkli (URL):</label>
+                            <input type="text" id="prof-cover" class="input" placeholder="https://...">
+                        </div>
+                        <div style="grid-column: 1 / -1;">
+                            <label data-i18n="about_me">Haqqımda (Bio):</label>
+                            <textarea id="prof-bio" class="input" rows="3" placeholder="Özünüz haqqında yazın..."></textarea>
+                        </div>
+                        <div>
+                            <label>Instagram Username:</label>
+                            <input type="text" id="prof-ig" class="input" placeholder="@username">
+                        </div>
+                        <div>
+                            <label>Yeni Şifrə (İstəyə bağlı):</label>
+                            <input type="password" id="prof-pass" class="input" placeholder="***">
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-gold" style="width:100%; margin-top:20px; font-size: 1.1rem;" onclick="saveProfile()"><i class="fas fa-save"></i> <span data-i18n="save_profile">PROFİLİ YENİLƏ</span></button>
+                </div>
             </div>
         </div>
 
         <div id="sec-support" class="hidden">
-            <h2 class="raj" style="margin-bottom:20px; color:var(--primary);">Dəstək & Sifarişlər</h2>
-            <p style="color:var(--gray); margin-bottom:20px;">Bakiye yükləmək üçün çeki bizə atın, profil adı dəyişmək və ya probleminizi bildirin.</p>
-            <button class="btn" onclick="openModal('new-ticket-modal')">YENİ BİLET YARAT</button>
-            <div id="user-tickets" style="margin-top:20px; display:flex; flex-direction:column; gap:10px;"></div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:15px;">
+                <div>
+                    <h2 class="raj" style="color:var(--primary); font-size:2rem;"><i class="fas fa-headset"></i> <span data-i18n="support_tickets">Dəstək & Sifarişlər</span></h2>
+                    <p style="color:var(--gray); margin-top:5px;" data-i18n="support_desc">Bakiye yükləmək, ad dəyişmək və ya problemlər üçün bilet yaradın.</p>
+                </div>
+                <button class="btn btn-gold" onclick="openModal('new-ticket-modal')" style="font-size:1.1rem;"><i class="fas fa-plus-circle"></i> <span data-i18n="new_ticket">YENİ BİLET YARAT</span></button>
+            </div>
+            
+            <div id="user-tickets" style="display:flex; flex-direction:column; gap:15px; margin-top: 30px;"></div>
         </div>
 
         <div id="sec-admin" class="hidden">
-            <h2 class="raj" style="color:var(--sec); margin-bottom:20px;">YÖNETİM PANELİ (GİZLİ)</h2>
-            <div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap: wrap;">
-                <button class="btn" onclick="adminView('tickets')">BİLETLER & ÖDEMELER</button>
-                <button class="btn dev-only" onclick="adminView('users')">KULLANICILAR / YETKİ</button>
-                <button class="btn dev-only" onclick="adminView('products')">ÜRÜN / KATEQORİYA EKLE</button>
-                <button class="btn" onclick="adminView('chat-dev')">DEV & ADMIN SOHBET</button>
-                <button class="btn" onclick="adminView('chat-helper')">HELPER & ADMIN SOHBET</button>
-                <button class="btn" style="border-color:#8a2be2; color:#8a2be2;" onclick="adminView('chat-vip')">VIP CHAT</button>
+            <h2 class="raj" style="color:var(--sec); margin-bottom:20px; font-size:2rem;"><i class="fas fa-server"></i> <span data-i18n="admin_panel">İDARƏETMƏ PANELİ</span></h2>
+            
+            <div class="tabs" id="admin-tabs">
+                <button class="tab-btn active" onclick="adminView('tickets', this)"><i class="fas fa-ticket-alt"></i> BİLETLƏR & ÖDƏNİŞLƏR</button>
+                <button class="tab-btn dev-only" onclick="adminView('users', this)"><i class="fas fa-users"></i> İSTİFADƏÇİLƏR & YETKİ</button>
+                <button class="tab-btn dev-only" onclick="adminView('products', this)"><i class="fas fa-box-open"></i> MƏHSULLAR</button>
+                <button class="tab-btn" onclick="adminView('chat-dev', this)"><i class="fas fa-code"></i> DEV & ADMIN ÇAT</button>
+                <button class="tab-btn" onclick="adminView('chat-helper', this)"><i class="fas fa-hands-helping"></i> HELPER ÇAT</button>
+                <button class="tab-btn" style="color:#8a2be2;" onclick="adminView('chat-vip', this)"><i class="fas fa-gem"></i> VIP ÇAT</button>
             </div>
-            <div id="admin-content" style="background:var(--panel); padding:20px; border-radius:10px; border:1px solid var(--border);"></div>
+            
+            <div id="admin-content" style="background:var(--panel); padding:25px; border-radius:12px; border:1px solid var(--border); box-shadow: 0 5px 20px rgba(0,0,0,0.2); min-height: 400px;"></div>
         </div>
     </div>
 
     <footer>
         <div class="footer-content">
-            <h3 class="raj" style="color: var(--primary);">SHUKUROVS GAMING</h3>
-            <p>Developer: Elnur | Bütün hüquqlar qorunur &copy; 2026</p>
-            <p><i class="fas fa-globe"></i> Rəsmi Sayt: <a href="https://shukurovsgaming.onrender.com/" target="_blank" style="color: var(--gold); text-decoration: none;"><b>https://shukurovsgaming.onrender.com/</b></a></p>
-            <p><i class="fab fa-tiktok"></i> TikTok: <b>shukurovs_ff</b></p>
-            <p><i class="fab fa-whatsapp"></i> WhatsApp: <b>099 846 16 06</b></p>
-            <div class="secure-badge"><i class="fas fa-shield-alt"></i> 100% Güvənli Alışveriş</div>
+            <h3 class="raj" style="color: var(--primary); font-size: 1.8rem; text-shadow: 0 0 10px rgba(0,229,255,0.3);">SHUKUROVS GAMING</h3>
+            <p style="color: var(--gray);">Developer: <span style="color:var(--sec); font-weight:bold;">Elnur</span> | Bütün hüquqlar qorunur &copy; 2026</p>
+            <div style="display:flex; gap:20px; font-size: 1.2rem; margin-top: 10px;">
+                <a href="#" style="color: var(--text); text-decoration: none; transition: 0.3s;"><i class="fab fa-tiktok"></i> shukurovs_ff</a>
+                <a href="#" style="color: #25D366; text-decoration: none; transition: 0.3s;"><i class="fab fa-whatsapp"></i> 099 846 16 06</a>
+            </div>
+            <div class="secure-badge"><i class="fas fa-shield-alt"></i> 100% Güvənli Sistem</div>
         </div>
     </footer>
 
-    <div class="modal-bg hidden" id="settings-modal">
+    <div class="modal-bg" id="public-profile-modal">
+        <div class="modal" style="padding:0; overflow:hidden;">
+            <i class="fas fa-times close-modal" style="z-index:10; color:#fff; text-shadow:0 0 5px #000;" onclick="closeModal('public-profile-modal')"></i>
+            <div id="pub-cover" class="cover-photo" style="height: 120px; border-radius: 15px 15px 0 0; margin-bottom:-40px; border:none;"></div>
+            <div style="padding: 20px; text-align: center;">
+                <img id="pub-img" src="" class="profile-img-preview" style="width:90px; height:90px; border-width: 3px;">
+                <h3 class="raj" style="font-size:1.6rem; margin-bottom:5px;"><span id="pub-nick"></span> <span id="pub-tag" class="tag" style="vertical-align:middle; font-size:0.6rem;"></span></h3>
+                <p id="pub-bio" style="color:var(--gray); font-size:0.9rem; margin-bottom:15px; font-style:italic;"></p>
+                <div id="pub-socials" style="display:flex; justify-content:center; gap:10px; margin-bottom:15px;"></div>
+                <div style="background:var(--input); padding:10px; border-radius:8px; border:1px solid var(--border); display:inline-block; margin-top:10px;">
+                    Qeydiyyat: <b style="color:var(--primary);">Aktiv İstifadəçi</b>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-bg" id="search-modal">
         <div class="modal">
-            <h2 class="raj" style="color:var(--primary); margin-bottom:15px;">Ayarlar</h2>
-            <label>Sayt Teması:</label>
-            <select id="theme-select" class="input" onchange="changeTheme()">
-                <option value="dark">Qara (Dark)</option>
-                <option value="light">Ağ (Light)</option>
+            <i class="fas fa-times close-modal" onclick="closeModal('search-modal')"></i>
+            <h2 class="raj" style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-search"></i> Axtarış Nəticələri</h2>
+            <div id="search-results-list" style="max-height: 300px; overflow-y:auto; padding-right:5px;"></div>
+        </div>
+    </div>
+
+    <div class="modal-bg" id="settings-modal">
+        <div class="modal">
+            <i class="fas fa-times close-modal" onclick="closeModal('settings-modal')"></i>
+            <h2 class="raj" style="color:var(--primary); margin-bottom:20px;"><i class="fas fa-cog"></i> <span data-i18n="settings">Ayarlar</span></h2>
+            
+            <label data-i18n="language">Dil Seçimi:</label>
+            <select id="lang-select" class="input" onchange="changeLang()">
+                <option value="az">Azərbaycan</option>
+                <option value="tr">Türkçe</option>
+                <option value="en">English</option>
+                <option value="ru">Русский</option>
             </select>
-            <button class="btn" style="width:100%; border:none; color:var(--gray);" onclick="closeModal('settings-modal')">Bağla</button>
+
+            <label data-i18n="theme">Sayt Teması:</label>
+            <select id="theme-select" class="input" onchange="changeTheme()">
+                <option value="dark" data-i18n="dark_mode">Qara (Dark)</option>
+                <option value="light" data-i18n="light_mode">Ağ (Light)</option>
+            </select>
         </div>
     </div>
 
-    <div class="modal-bg hidden" id="auth-modal">
-        <div class="modal">
-            <h2 id="auth-title" class="raj" style="color:var(--primary); margin-bottom:15px;">QEYDİYYAT</h2>
+    <div class="modal-bg" id="auth-modal">
+        <div class="modal" style="width: 400px;">
+            <i class="fas fa-times close-modal" onclick="closeModal('auth-modal')"></i>
+            <h2 id="auth-title" class="raj" style="color:var(--primary); margin-bottom:20px; text-align:center; font-size:2rem;">QEYDİYYAT</h2>
+            
             <div id="auth-reg">
-                <label>Nickname:</label> <input type="text" id="reg-nick" class="input" placeholder="Oyunçu Adı">
-                <label>Şifrə:</label> <input type="password" id="reg-pass" class="input" placeholder="***">
-                <button class="btn" style="width:100%" onclick="register()">QEYDİYYATDAN KEÇ</button>
-                <p style="margin-top:10px; font-size:0.8rem; cursor:pointer; color:var(--gold);" onclick="toggleAuth()">Zaten hesabın var? Giriş et.</p>
+                <label data-i18n="username">Nickname (Oyunçu Adı):</label> 
+                <input type="text" id="reg-nick" class="input" placeholder="Elnur, Xumar, v.s." onkeypress="handleEnter(event, register)">
+                <label data-i18n="password">Şifrə:</label> 
+                <input type="password" id="reg-pass" class="input" placeholder="***" onkeypress="handleEnter(event, register)">
+                <button class="btn btn-gold" style="width:100%; font-size:1.1rem; margin-top:10px;" onclick="register()"><i class="fas fa-user-plus"></i> <span data-i18n="register_btn">QEYDİYYATDAN KEÇ</span></button>
+                <p style="margin-top:15px; font-size:0.9rem; text-align:center; cursor:pointer; color:var(--gray);" onclick="toggleAuth()"><span data-i18n="have_account">Zaten hesabın var?</span> <b style="color:var(--primary);">Giriş et.</b></p>
             </div>
+            
             <div id="auth-log" class="hidden">
-                <label>Nickname:</label> <input type="text" id="log-nick" class="input">
-                <label>Şifrə:</label> <input type="password" id="log-pass" class="input">
-                <button class="btn" style="width:100%" onclick="login()">GİRİŞ</button>
-                <p style="margin-top:10px; font-size:0.8rem; cursor:pointer; color:var(--gold);" onclick="toggleAuth()">Hesab yoxdur? Qeydiyyat.</p>
+                <label data-i18n="username">Nickname:</label> 
+                <input type="text" id="log-nick" class="input" onkeypress="handleEnter(event, login)">
+                <label data-i18n="password">Şifrə:</label> 
+                <input type="password" id="log-pass" class="input" onkeypress="handleEnter(event, login)">
+                <button class="btn btn-gold" style="width:100%; font-size:1.1rem; margin-top:10px;" onclick="login()"><i class="fas fa-sign-in-alt"></i> <span data-i18n="login_btn_2">GİRİŞ ET</span></button>
+                <p style="margin-top:15px; font-size:0.9rem; text-align:center; cursor:pointer; color:var(--gray);" onclick="toggleAuth()"><span data-i18n="no_account">Hesab yoxdur?</span> <b style="color:var(--primary);">Qeydiyyat.</b></p>
             </div>
-            <button class="btn" style="border:none; color:var(--gray); margin-top:10px; width:100%;" onclick="closeModal('auth-modal')">Bağla</button>
         </div>
     </div>
 
-    <div class="modal-bg hidden" id="buy-modal">
-        <div class="modal">
-            <h3 id="buy-name" class="raj" style="color:var(--primary);"></h3>
-            <p id="buy-price" class="price raj"></p>
-            <label id="buy-label" style="margin-top:15px; display:block;">Oyun ID:</label>
-            <input type="text" id="buy-id" class="input">
-            <button class="btn" style="width:100%" onclick="confirmBuy()">SİFARİŞİ TƏSDİQLƏ</button>
-            <button class="btn" style="border:none; color:var(--gray); margin-top:10px; width:100%" onclick="closeModal('buy-modal')">Ləğv Et</button>
+    <div class="modal-bg" id="buy-modal">
+        <div class="modal" style="text-align: center;">
+            <i class="fas fa-times close-modal" onclick="closeModal('buy-modal')"></i>
+            <img id="buy-img" src="" style="width: 80px; margin-bottom: 15px; border-radius: 10px;">
+            <h3 id="buy-name" class="raj" style="color:var(--primary); font-size:1.8rem;"></h3>
+            <p id="buy-price" class="price raj" style="font-size:2rem;"></p>
+            
+            <div style="text-align: left; margin-top: 20px;">
+                <label id="buy-label" style="font-weight:bold; color:var(--gold);">Oyun ID:</label>
+                <input type="text" id="buy-id" class="input" style="font-size: 1.1rem; text-align:center;" placeholder="Məlumatı bura daxil edin" onkeypress="handleEnter(event, confirmBuy)">
+            </div>
+            
+            <button class="btn btn-sec" style="width:100%; font-size:1.1rem; padding:15px; margin-top:10px;" onclick="confirmBuy()"><i class="fas fa-check-circle"></i> SİFARİŞİ TƏSDİQLƏ</button>
         </div>
     </div>
 
-    <div class="modal-bg hidden" id="new-ticket-modal">
+    <div class="modal-bg" id="new-ticket-modal">
         <div class="modal">
-            <h3 class="raj">YENİ BİLET</h3>
+            <i class="fas fa-times close-modal" onclick="closeModal('new-ticket-modal')"></i>
+            <h3 class="raj" style="color:var(--primary); margin-bottom:15px; font-size:1.8rem;"><i class="fas fa-envelope-open-text"></i> YENİ BİLET</h3>
             <label>Mövzu:</label>
             <select id="t-type" class="input">
                 <option value="Sifariş Sorunu">Sifariş Sorunu (Yardım)</option>
@@ -199,107 +327,204 @@
                 <option value="Digər">Digər Suallar</option>
             </select>
             <label>Mesaj / Açıqlama:</label>
-            <textarea id="t-msg" class="input" rows="4"></textarea>
-            <button class="btn" style="width:100%" onclick="createTicket()">GÖNDƏR</button>
-            <button class="btn" style="border:none; color:var(--gray); width:100%" onclick="closeModal('new-ticket-modal')">Bağla</button>
+            <textarea id="t-msg" class="input" rows="5" placeholder="Probleminizi və ya istəyinizi ətraflı yazın..."></textarea>
+            <button class="btn btn-gold" style="width:100%; font-size:1.1rem;" onclick="createTicket()"><i class="fas fa-paper-plane"></i> BİLETİ GÖNDƏR</button>
         </div>
     </div>
 
-    <div class="modal-bg hidden" id="chat-modal">
-        <div class="modal" style="width:600px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <h3 class="raj" id="chat-title">Bilet #</h3>
-                <button class="btn dev-only" style="padding:2px 8px; border-color:var(--sec); color:var(--sec);" onclick="closeTicket()">Bağla (Həll olundu)</button>
-            </div>
-            <div class="chat-box" id="chat-box"></div>
-            
-            <div style="display:flex; flex-direction:column; gap:5px;">
-                <input type="text" id="chat-img-input" class="input" style="margin:0;" placeholder="Çek və ya Şəkil URL-i (İstəyə bağlı)">
+    <div class="modal-bg" id="chat-modal">
+        <div class="modal" style="width:650px; padding:20px;">
+            <i class="fas fa-times close-modal" onclick="closeModal('chat-modal')"></i>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; padding-bottom:10px; border-bottom:1px solid var(--border);">
+                <h3 class="raj" id="chat-title" style="color:var(--primary); font-size:1.5rem;">Bilet #</h3>
                 <div style="display:flex; gap:10px;">
-                    <input type="text" id="chat-input" class="input" style="margin:0; flex:1;" placeholder="Mesaj yaz...">
-                    <button class="btn" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
+                    <button id="admin-name-change-tool" class="btn btn-sec hidden" style="padding:5px 10px;" onclick="adminChangeNamePrompt()"><i class="fas fa-signature"></i> ADI DƏYİŞ</button>
+                    <button class="btn dev-only" style="padding:5px 10px; border-color:var(--sec); color:var(--sec);" onclick="closeTicket()"><i class="fas fa-lock"></i> BAĞLA</button>
                 </div>
             </div>
+            
+            <div class="chat-wrapper">
+                <div class="chat-box" id="chat-box"></div>
+                
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                    <input type="text" id="chat-img-input" class="input" style="margin:0; padding:10px;" placeholder="Çek və ya Şəkil URL-i (İstəyə bağlı)">
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" id="chat-input" class="input" style="margin:0; flex:1; font-size:1rem;" placeholder="Mesaj yaz..." onkeypress="handleEnter(event, sendTicketMsg)">
+                        <button class="btn btn-gold" style="padding: 0 25px;" onclick="sendTicketMsg()"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
 
-            <div id="admin-bal-tool" class="hidden" style="margin-top:15px; padding:10px; border:1px solid var(--gold); border-radius:5px;">
-                <label style="color:var(--gold); font-size:0.8rem;">Müştəriyə Bakiye Vur (Sadece Dev/Admin):</label>
-                <div style="display:flex; gap:5px; margin-top:5px;">
-                    <input type="number" id="admin-add-bal" class="input" style="margin:0;" placeholder="Məbləğ AZN">
-                    <button class="btn btn-gold" onclick="adminAddBal()">VUR</button>
+                <div id="admin-bal-tool" class="hidden" style="margin-top:15px; padding:15px; background:rgba(255,215,0,0.05); border:1px solid var(--gold); border-radius:8px;">
+                    <label style="color:var(--gold); font-weight:bold; font-size:0.9rem;"><i class="fas fa-coins"></i> Müştəriyə Bakiye Vur (Sadece Dev/Admin):</label>
+                    <div style="display:flex; gap:10px; margin-top:10px;">
+                        <input type="number" id="admin-add-bal" class="input" style="margin:0;" placeholder="Məbləğ (AZN)" onkeypress="handleEnter(event, adminAddBal)">
+                        <button class="btn btn-gold" onclick="adminAddBal()">BAKİYE VUR</button>
+                    </div>
                 </div>
             </div>
-            <button class="btn" style="border:none; color:var(--gray); width:100%; margin-top:10px;" onclick="closeModal('chat-modal')">Geri</button>
         </div>
     </div>
 
-    <div class="modal-bg hidden" id="add-prod-modal">
+    <div class="modal-bg" id="add-prod-modal">
         <div class="modal">
-            <h3 class="raj">YENİ MƏHSUL (DEV)</h3>
-            <label>Kategoriya:</label> <input type="text" id="ap-cat" class="input">
-            <label>Adı:</label> <input type="text" id="ap-name" class="input">
-            <label>Qiymət (AZN):</label> <input type="number" id="ap-price" class="input">
-            <label>Oyunçudan istənilən məlumat (Label):</label> <input type="text" id="ap-label" class="input" placeholder="Oyunçu ID">
-            <label>Şəkil URL:</label> <input type="text" id="ap-img" class="input">
-            <button class="btn btn-gold" style="width:100%" onclick="saveProduct()">ƏLAVƏ ET</button>
-            <button class="btn" style="border:none; color:var(--gray); width:100%" onclick="closeModal('add-prod-modal')">Bağla</button>
+            <i class="fas fa-times close-modal" onclick="closeModal('add-prod-modal')"></i>
+            <h3 class="raj" style="color:var(--sec); margin-bottom:20px;"><i class="fas fa-box-open"></i> YENİ MƏHSUL (DEV)</h3>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div><label>Kategoriya:</label> <input type="text" id="ap-cat" class="input" placeholder="PUBG, Free Fire..."></div>
+                <div><label>Adı:</label> <input type="text" id="ap-name" class="input" placeholder="60 UC"></div>
+                <div><label>Qiymət (AZN):</label> <input type="number" id="ap-price" class="input" placeholder="1.50"></div>
+                <div><label>Tələb olunan Məlumat:</label> <input type="text" id="ap-label" class="input" placeholder="Oyunçu ID"></div>
+                <div style="grid-column: 1 / -1;"><label>Şəkil URL:</label> <input type="text" id="ap-img" class="input" placeholder="https://..."></div>
+            </div>
+            <button class="btn btn-sec" style="width:100%; margin-top:15px;" onclick="saveProduct()"><i class="fas fa-plus"></i> SİSTEMƏ ƏLAVƏ ET</button>
         </div>
     </div>
 
     <div id="toast"></div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('sg_db')) || {
-            users: [],
-            products: [], 
-            tickets: [],
-            generalChats: { devAdmin: [], helperAdmin: [], vipChat: [] }
+        /* --- DİLLƏR (Multi-Language) --- */
+        const dict = {
+            az: {
+                search_placeholder: "İstifadəçi axtar...", login_btn: "Giriş / Qeydiyyat", vip_title: "VIP STATUS AL (AYLIQ)", 
+                vip_desc: "Hər alışda 2% cashback, xüsusi tag, VIP Chat-a giriş və öncəlikli dəstək!", vip_buy: "VIP AL (5 AZN)",
+                my_profile: "Mənim Profilim", name_change_info: "Adınızı dəyişmək üçün Dəstək (Ticket) xidmətinə müraciət edin.",
+                prof_img_url: "Profil Şəkli (URL):", cover_img_url: "Arxa Plan Şəkli (URL):", about_me: "Haqqımda (Bio):",
+                save_profile: "PROFİLİ YENİLƏ", support_tickets: "Dəstək & Sifarişlər", support_desc: "Bakiye yükləmək, ad dəyişmək və ya problemlər üçün bilet yaradın.",
+                new_ticket: "YENİ BİLET YARAT", admin_panel: "İDARƏETMƏ PANELİ", settings: "Ayarlar", language: "Dil Seçimi:",
+                theme: "Sayt Teması:", dark_mode: "Qara (Dark)", light_mode: "Ağ (Light)", username: "Nickname (Oyunçu Adı):",
+                password: "Şifrə:", register_btn: "QEYDİYYATDAN KEÇ", have_account: "Zaten hesabın var?", login_btn_2: "GİRİŞ ET",
+                no_account: "Hesab yoxdur?"
+            },
+            tr: {
+                search_placeholder: "Kullanıcı ara...", login_btn: "Giriş / Kayıt", vip_title: "VIP STATÜ AL (AYLIK)", 
+                vip_desc: "Her alışta %2 iade, özel etiket, VIP Sohbet ve öncelikli destek!", vip_buy: "VIP AL (5 AZN)",
+                my_profile: "Benim Profilim", name_change_info: "Adınızı değiştirmek için Destek (Ticket) talebi oluşturun.",
+                prof_img_url: "Profil Resmi (URL):", cover_img_url: "Arka Plan Resmi (URL):", about_me: "Hakkımda (Biyografi):",
+                save_profile: "PROFİLİ GÜNCELLE", support_tickets: "Destek & Siparişler", support_desc: "Bakiye yüklemek veya sorunlar için bilet açın.",
+                new_ticket: "YENİ BİLET OLUŞTUR", admin_panel: "YÖNETİM PANELİ", settings: "Ayarlar", language: "Dil Seçimi:",
+                theme: "Site Teması:", dark_mode: "Siyah (Dark)", light_mode: "Beyaz (Light)", username: "Kullanıcı Adı:",
+                password: "Şifre:", register_btn: "KAYIT OL", have_account: "Zaten hesabın var mı?", login_btn_2: "GİRİŞ YAP",
+                no_account: "Hesabın yok mu?"
+            },
+            en: {
+                search_placeholder: "Search user...", login_btn: "Login / Register", vip_title: "BUY VIP STATUS (MONTHLY)", 
+                vip_desc: "2% cashback, custom tag, VIP Chat access and priority support!", vip_buy: "BUY VIP (5 AZN)",
+                my_profile: "My Profile", name_change_info: "To change your name, open a Support Ticket.",
+                prof_img_url: "Profile Image (URL):", cover_img_url: "Cover Image (URL):", about_me: "About Me (Bio):",
+                save_profile: "UPDATE PROFILE", support_tickets: "Support & Orders", support_desc: "Create a ticket to add funds or report issues.",
+                new_ticket: "CREATE NEW TICKET", admin_panel: "ADMIN PANEL", settings: "Settings", language: "Select Language:",
+                theme: "Site Theme:", dark_mode: "Dark", light_mode: "Light", username: "Nickname:",
+                password: "Password:", register_btn: "REGISTER", have_account: "Already have an account?", login_btn_2: "LOGIN",
+                no_account: "Don't have an account?"
+            },
+            ru: {
+                search_placeholder: "Поиск пользователя...", login_btn: "Вход / Регистрация", vip_title: "КУПИТЬ VIP СТАТУС", 
+                vip_desc: "2% кэшбэк, спец. тег, доступ в VIP-чат и поддержка!", vip_buy: "КУПИТЬ VIP (5 AZN)",
+                my_profile: "Мой профиль", name_change_info: "Для изменения имени создайте тикет в поддержку.",
+                prof_img_url: "Фото профиля (URL):", cover_img_url: "Обложка (URL):", about_me: "Обо мне (Био):",
+                save_profile: "ОБНОВИТЬ ПРОФИЛЬ", support_tickets: "Поддержка и Заказы", support_desc: "Создайте тикет для пополнения или жалоб.",
+                new_ticket: "СОЗДАТЬ ТИКЕТ", admin_panel: "ПАНЕЛЬ УПРАВЛЕНИЯ", settings: "Настройки", language: "Выбор языка:",
+                theme: "Тема сайта:", dark_mode: "Темная", light_mode: "Светлая", username: "Никнейм:",
+                password: "Пароль:", register_btn: "РЕГИСТРАЦИЯ", have_account: "Уже есть аккаунт?", login_btn_2: "ВОЙТИ",
+                no_account: "Нет аккаунта?"
+            }
         };
 
+        let currentLang = localStorage.getItem('sg_lang') || 'az';
+        
+        function applyLanguage() {
+            document.getElementById('lang-select').value = currentLang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                let key = el.getAttribute('data-i18n');
+                if(dict[currentLang][key]) {
+                    if(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = dict[currentLang][key];
+                    else el.innerHTML = dict[currentLang][key];
+                }
+            });
+        }
+
+        function changeLang() {
+            currentLang = document.getElementById('lang-select').value;
+            localStorage.setItem('sg_lang', currentLang);
+            applyLanguage();
+        }
+
+        /* --- VERİLƏNLƏR BAZASI (Local Storage) --- */
+        let db = JSON.parse(localStorage.getItem('sg_db')) || {
+            users: [], products: [], tickets: [], generalChats: { devAdmin: [], helperAdmin: [], vipChat: [] }
+        };
+
+        // Əgər bazada heç kim yoxdursa Developer hesabını yarat
         if(!db.users.find(u => u.nick === 'Elnur')) {
             db.users.push({ 
                 id:'u0', nick:'Elnur', pass:'12345', role:'Developer', balance: 9999.00, isVip: true, 
-                vipExpiry: Date.now() + (365 * 24 * 60 * 60 * 1000), photo: '', bio: 'Sistem Yaradıcısı' 
+                vipExpiry: Date.now() + (365 * 24 * 60 * 60 * 1000), photo: 'https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80', 
+                cover: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                bio: 'Sistem Yaradıcısı & Full Stack Developer', ig: '@elnur_dev'
             });
-            saveDb();
+        }
+
+        // 1. MƏHSUL FİXİ: Əgər məhsul siyahısı boşdursa, standart məhsulları avtomatik yüklə
+        if(db.products.length === 0) {
+            db.products = [
+                { id: 1, cat: 'PUBG', name: '60 UC', price: 1.50, req: 'Oyunçu ID', img: 'https://cdn-icons-png.flaticon.com/512/3211/3211158.png' },
+                { id: 2, cat: 'PUBG', name: '325 UC', price: 7.00, req: 'Oyunçu ID', img: 'https://cdn-icons-png.flaticon.com/512/3211/3211158.png' },
+                { id: 3, cat: 'PUBG', name: '660 UC', price: 14.00, req: 'Oyunçu ID', img: 'https://cdn-icons-png.flaticon.com/512/3211/3211158.png' },
+                { id: 4, cat: 'Free Fire', name: '100 Elmas', price: 1.80, req: 'Oyunçu ID', img: 'https://cdn-icons-png.flaticon.com/512/751/751432.png' },
+                { id: 5, cat: 'Free Fire', name: '310 Elmas', price: 5.50, req: 'Oyunçu ID', img: 'https://cdn-icons-png.flaticon.com/512/751/751432.png' }
+            ];
+            localStorage.setItem('sg_db', JSON.stringify(db));
         }
 
         let curUser = JSON.parse(localStorage.getItem('sg_cur')) || null;
         let curTicket = null;
         let curBuy = null;
+        let currentGenChat = '';
 
         function saveDb() { localStorage.setItem('sg_db', JSON.stringify(db)); }
         function saveCur() { localStorage.setItem('sg_cur', JSON.stringify(curUser)); }
 
+        /* --- ÜMUMİ FUNKSİYALAR --- */
         function showToast(msg) {
             let t = document.getElementById('toast');
-            t.innerText = msg;
-            t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 3000);
+            t.innerHTML = `<i class="fas fa-info-circle"></i> ${msg}`;
+            t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 3500);
         }
-        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function openModal(id) { 
+            document.getElementById(id).classList.remove('hidden'); 
+            setTimeout(() => document.getElementById(id).classList.add('show'), 10);
+        }
+        function closeModal(id) { 
+            document.getElementById(id).classList.remove('show');
+            setTimeout(() => document.getElementById(id).classList.add('hidden'), 300);
+        }
+        function handleEnter(e, func) { if(e.key === 'Enter') func(); }
+        
         function changeTheme() {
             let val = document.getElementById('theme-select').value;
-            if(val === 'light') document.body.classList.add('light-mode'); else document.body.classList.remove('light-mode');
+            if(val === 'light') { document.body.classList.add('light-mode'); localStorage.setItem('sg_theme', 'light'); }
+            else { document.body.classList.remove('light-mode'); localStorage.setItem('sg_theme', 'dark'); }
         }
-        
-        function nav(sec) {
+
+        function navPage(sec) {
             ['sec-home', 'sec-support', 'sec-admin', 'sec-profile'].forEach(s => document.getElementById(s).classList.add('hidden'));
             document.getElementById('sec-'+sec).classList.remove('hidden');
-            if(sec === 'support') { if(!curUser) return showToast("Giriş edin!"); renderUserTickets(); }
-            if(sec === 'admin') adminView('tickets');
-            if(sec === 'profile') { if(!curUser) return showToast("Giriş edin!"); loadProfile(); }
+            if(sec === 'support') { if(!curUser) { openModal('auth-modal'); return showToast("Öncə giriş edin!"); } renderUserTickets(); }
+            if(sec === 'admin') {
+                if(curUser.role === 'Member') return showToast("Yetkiniz yoxdur!"); 
+                document.querySelector('.tab-btn.active').click(); 
+            }
+            if(sec === 'profile') { if(!curUser) { openModal('auth-modal'); return showToast("Öncə giriş edin!"); } loadProfile(); }
+            window.scrollTo(0, 0);
         }
 
         function checkVipStatus() {
             if(!curUser) return;
             let dbU = db.users.find(u => u.id === curUser.id);
             if(dbU && dbU.isVip && dbU.vipExpiry && Date.now() > dbU.vipExpiry) {
-                dbU.isVip = false;
-                dbU.vipExpiry = null;
-                saveDb();
-                curUser = dbU;
-                saveCur();
-                showToast("VIP statusunuzun vaxtı bitdi!");
+                dbU.isVip = false; dbU.vipExpiry = null; saveDb();
+                curUser = dbU; saveCur(); showToast("VIP statusunuzun vaxtı bitdi!");
             }
         }
 
@@ -315,7 +540,9 @@
                 document.getElementById('user-bal').innerText = curUser.balance.toFixed(2) + ' AZN';
                 document.getElementById('user-tag').innerText = curUser.isVip ? 'VIP ' + curUser.role : curUser.role;
                 document.getElementById('user-tag').className = 'tag ' + (curUser.isVip ? 'VIP' : curUser.role);
+                
                 document.querySelectorAll('.dev-only').forEach(el => { el.style.display = (curUser.role === 'Developer') ? 'inline-block' : 'none'; });
+                
                 if(curUser.role === 'Developer' || curUser.role === 'Admin' || curUser.role === 'Helper') {
                     document.getElementById('dev-btn').classList.remove('hidden');
                 } else { document.getElementById('dev-btn').classList.add('hidden'); }
@@ -325,48 +552,109 @@
             }
         }
 
+        /* --- AUTH --- */
         let isLogin = false;
         function toggleAuth() {
             isLogin = !isLogin;
-            document.getElementById('auth-title').innerText = isLogin ? 'GİRİŞ' : 'QEYDİYYAT';
+            document.getElementById('auth-title').innerText = isLogin ? (dict[currentLang].login_btn_2 || 'GİRİŞ') : (dict[currentLang].register_btn || 'QEYDİYYAT');
             document.getElementById('auth-reg').classList.toggle('hidden', isLogin);
             document.getElementById('auth-log').classList.toggle('hidden', !isLogin);
         }
         
         function register() {
-            let nick = document.getElementById('reg-nick').value;
+            let nick = document.getElementById('reg-nick').value.trim();
             let pass = document.getElementById('reg-pass').value;
-            if(!nick || !pass) return showToast("Doldurun!");
-            if(db.users.find(u => u.nick === nick)) return showToast("Bu Nick artıq var!");
-            let assignedRole = (nick.toLowerCase() === 'elnur') ? 'Developer' : 'Member';
+            if(!nick || !pass) return showToast("Xanaları doldurun!");
+            if(db.users.find(u => u.nick.toLowerCase() === nick.toLowerCase())) return showToast("Bu Nick artıq istifadədədir!");
             
-            let nu = { id:'u'+Date.now(), nick, pass, role: assignedRole, balance:0, isVip:false, vipExpiry:null, photo:'', bio:'' };
+            // Xüsusi qeydiyyat yoxlaması (Məsələn, "Elnur" admin kimi girə bilməz əgər bazada varsa, yoxdursa Dev olur, digərləri Member)
+            let assignedRole = (nick.toLowerCase() === 'elnur' && db.users.length === 0) ? 'Developer' : 'Member';
+            
+            let nu = { id:'u'+Date.now(), nick, pass, role: assignedRole, balance:0, isVip:false, vipExpiry:null, photo:'', cover:'', bio:'', ig:'' };
             db.users.push(nu); saveDb();
             curUser = nu; saveCur();
-            closeModal('auth-modal'); updateNav(); showToast("Qeydiyyat uğurludur!");
+            closeModal('auth-modal'); updateNav(); showToast("Qeydiyyat uğurludur! Xoş gəldiniz, " + nick);
         }
         
         function login() {
-            let n = document.getElementById('log-nick').value;
+            let n = document.getElementById('log-nick').value.trim();
             let p = document.getElementById('log-pass').value;
-            let u = db.users.find(x => x.nick === n && x.pass === p);
+            let u = db.users.find(x => x.nick.toLowerCase() === n.toLowerCase() && x.pass === p);
             if(u) { curUser = u; saveCur(); closeModal('auth-modal'); updateNav(); showToast("Giriş edildi!"); }
             else showToast("Səhv Nick və ya Şifrə!");
         }
-        function logout() { curUser = null; localStorage.removeItem('sg_cur'); nav('home'); updateNav(); }
+        function logout() { curUser = null; localStorage.removeItem('sg_cur'); navPage('home'); updateNav(); }
 
+        /* --- AXTARIŞ VƏ İCTİMAİ PROFİL (YENİ) --- */
+        function handleGlobalSearch(e) {
+            if(e.key === 'Enter') {
+                let q = document.getElementById('global-search').value.toLowerCase().trim();
+                if(!q) return;
+                let results = db.users.filter(u => u.nick.toLowerCase().includes(q));
+                
+                let list = document.getElementById('search-results-list');
+                if(results.length === 0) {
+                    list.innerHTML = `<p style="text-align:center; color:var(--gray); padding: 20px;">Heç nə tapılmadı :(</p>`;
+                } else {
+                    list.innerHTML = results.map(u => `
+                        <div class="user-list-item" onclick="openPublicProfile('${u.id}')">
+                            <div class="user-info-flex">
+                                <img src="${u.photo || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}">
+                                <div>
+                                    <h4 style="color:var(--text);">${u.nick} ${u.isVip?'<i class="fas fa-crown" style="color:var(--gold); font-size:0.8rem;"></i>':''}</h4>
+                                    <span class="tag ${u.role}" style="font-size:0.6rem;">${u.role}</span>
+                                </div>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color:var(--gray);"></i>
+                        </div>
+                    `).join('');
+                }
+                openModal('search-modal');
+                document.getElementById('global-search').value = '';
+            }
+        }
+
+        function openPublicProfile(uid) {
+            let u = db.users.find(x => x.id === uid);
+            if(!u) return;
+            
+            document.getElementById('pub-cover').style.backgroundImage = `url('${u.cover || 'https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3'}')`;
+            document.getElementById('pub-img').src = u.photo || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+            document.getElementById('pub-nick').innerText = u.nick;
+            document.getElementById('pub-tag').className = 'tag ' + u.role;
+            document.getElementById('pub-tag').innerText = u.isVip ? 'VIP ' + u.role : u.role;
+            document.getElementById('pub-bio').innerText = u.bio ? `"${u.bio}"` : 'Bu istifadəçi haqqında məlumat daxil etməyib.';
+            
+            let socialsHTML = '';
+            if(u.ig) socialsHTML += `<a href="https://instagram.com/${u.ig.replace('@','')}" target="_blank" style="color:#E1306C; font-size:1.5rem;"><i class="fab fa-instagram"></i></a>`;
+            document.getElementById('pub-socials').innerHTML = socialsHTML;
+
+            closeModal('search-modal');
+            openModal('public-profile-modal');
+        }
+
+        /* --- PROFİL --- */
         function loadProfile() {
-            document.getElementById('prof-nick').value = curUser.nick;
+            document.getElementById('prof-display-nick').innerText = curUser.nick;
+            document.getElementById('prof-display-tag').className = 'tag ' + curUser.role;
+            document.getElementById('prof-display-tag').innerText = curUser.isVip ? 'VIP ' + curUser.role : curUser.role;
+            
             document.getElementById('prof-img').value = curUser.photo || '';
+            document.getElementById('prof-cover').value = curUser.cover || '';
             document.getElementById('prof-bio').value = curUser.bio || '';
+            document.getElementById('prof-ig').value = curUser.ig || '';
             document.getElementById('prof-pass').value = '';
+            
             document.getElementById('prof-img-view').src = curUser.photo || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+            document.getElementById('prof-cover-view').style.backgroundImage = `url('${curUser.cover || 'https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3'}')`;
         }
 
         function saveProfile() {
             let dbU = db.users.find(u => u.id === curUser.id);
             dbU.photo = document.getElementById('prof-img').value;
+            dbU.cover = document.getElementById('prof-cover').value;
             dbU.bio = document.getElementById('prof-bio').value;
+            dbU.ig = document.getElementById('prof-ig').value;
             let np = document.getElementById('prof-pass').value;
             if(np) dbU.pass = np;
             
@@ -374,11 +662,12 @@
             showToast("Profiliniz yeniləndi!");
         }
 
+        /* --- MƏHSULLAR VƏ MAĞAZA --- */
         function buildCategories() {
             let cats = [...new Set(db.products.map(p => p.cat))];
             let filterDiv = document.getElementById('category-filters');
-            let html = `<button class="btn" onclick="renderProds('all')">TÜMÜ</button>`;
-            cats.forEach(c => { html += `<button class="btn" onclick="renderProds('${c}')">${c.toUpperCase()}</button>`; });
+            let html = `<button class="btn" style="border-radius:20px;" onclick="renderProds('all')">TÜMÜ</button>`;
+            cats.forEach(c => { html += `<button class="btn" style="border-radius:20px;" onclick="renderProds('${c}')">${c.toUpperCase()}</button>`; });
             filterDiv.innerHTML = html;
         }
 
@@ -387,17 +676,17 @@
             document.getElementById('products-grid').innerHTML = arr.map(p => `
                 <div class="card">
                     <img src="${p.img || 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png'}">
-                    <h4 style="margin-bottom:10px;">${p.name}</h4>
+                    <h3 class="raj" style="margin-bottom:10px; font-size:1.4rem;">${p.name}</h3>
                     <div class="price">${p.price.toFixed(2)} AZN</div>
-                    <button class="btn" style="width:100%; margin-top:10px;" onclick="openBuy(${p.id})">AL</button>
+                    <button class="btn btn-primary" style="width:100%; margin-top:15px; background:var(--primary); color:#000;" onclick="openBuy(${p.id})"><i class="fas fa-shopping-basket"></i> SATIN AL</button>
                 </div>
             `).join('');
         }
 
         function buyVip() {
-            if(!curUser) return openModal('auth-modal');
-            if(curUser.isVip) return showToast("Zaten VIP-siniz!");
-            if(curUser.balance < 5) return showToast("Bakiye çatışmır! (5 AZN tələb olunur)");
+            if(!curUser) { openModal('auth-modal'); return showToast("Öncə giriş edin!"); }
+            if(curUser.isVip) return showToast("Artıq VIP-siniz!");
+            if(curUser.balance < 5) return showToast("Bakiye çatışmır! (Dəstək bölümündən bakiye yükləyin)");
             
             curUser.balance -= 5; 
             curUser.isVip = true;
@@ -409,148 +698,231 @@
         }
 
         function openBuy(id) {
-            if(!curUser) return openModal('auth-modal');
+            if(!curUser) { openModal('auth-modal'); return showToast("Öncə giriş edin!"); }
             curBuy = db.products.find(p => p.id === id);
+            document.getElementById('buy-img').src = curBuy.img;
             document.getElementById('buy-name').innerText = curBuy.name;
             document.getElementById('buy-price').innerText = curBuy.price.toFixed(2) + " AZN";
             document.getElementById('buy-label').innerText = curBuy.req + ":";
             document.getElementById('buy-id').value = '';
             openModal('buy-modal');
+            setTimeout(() => document.getElementById('buy-id').focus(), 100);
         }
 
         function confirmBuy() {
-            let reqId = document.getElementById('buy-id').value;
-            if(!reqId) return showToast("ID daxil edin!");
-            if(curUser.balance < curBuy.price) return showToast("Bakiye çatışmır!");
+            let reqId = document.getElementById('buy-id').value.trim();
+            if(!reqId) return showToast("Oyunçu ID daxil edin!");
+            if(curUser.balance < curBuy.price) return showToast("Bakiye çatışmır! Dəstək bölümündən yükləyin.");
             
             let finalPrice = curBuy.price; let cb = 0;
             if(curUser.isVip) { cb = finalPrice * 0.02; finalPrice -= cb; } 
             
             curUser.balance -= finalPrice;
             let dbU = db.users.find(u => u.id === curUser.id); dbU.balance = curUser.balance;
-            let t = { id:'ORD-'+Math.floor(Math.random()*9000), uId:curUser.id, uNick:curUser.nick, type:'Sifariş', subj:`Sifariş: ${curBuy.name} | ID: ${reqId}`, status:'Açıq', msgs:[{s:'Sistem', role:'Sistem', t:`Sifariş yaradıldı. Ödəndi: ${finalPrice.toFixed(2)} AZN.`}] };
-            if(cb>0) t.msgs.push({s:'Sistem', role:'Sistem', t:`VIP Cashback: ${cb.toFixed(2)} AZN qənaət etdiniz!`});
             
+            let t = { 
+                id:'ORD-'+Math.floor(Math.random()*90000), uId:curUser.id, uNick:curUser.nick, type:'Sifariş', 
+                subj:`Sifariş: ${curBuy.name} | ID: ${reqId}`, status:'Açıq', 
+                msgs:[{s:'Sistem', role:'Sistem', t:`Sifariş qeydə alındı. Ödəndi: ${finalPrice.toFixed(2)} AZN.`}] 
+            };
+            if(cb>0) t.msgs.push({s:'Sistem', role:'Sistem', t:`💎 VIP Cashback: ${cb.toFixed(2)} AZN balansınıza qayıtdı!`});
+            
+            if(cb>0) { curUser.balance += cb; dbU.balance += cb; }
+
             db.tickets.push(t); saveDb(); saveCur(); updateNav();
             closeModal('buy-modal');
             showToast("Sifariş Təsdiqləndi! Biletlərə baxın.");
         }
 
+        /* --- BİLETLƏR (TICKETS) --- */
         function createTicket() {
             let type = document.getElementById('t-type').value;
-            let msg = document.getElementById('t-msg').value;
-            if(!msg) return showToast("Açıqlama yazın!");
+            let msg = document.getElementById('t-msg').value.trim();
+            if(!msg) return showToast("Mətni boş buraxmayın!");
             
-            let t = { id:'TKT-'+Math.floor(Math.random()*9000), uId:curUser.id, uNick:curUser.nick, type, subj:msg, status:'Açıq', msgs:[{s:curUser.nick, role:curUser.role, t:msg}] };
-            if(type === 'Bakiye Yükləmə') {
-                t.msgs.push({s:'Sistem', role:'Sistem', t:'Bakiye yükləmək üçün yalnız Developer ilə əlaqə saxlayın. Çeki göndərin.'});
-            }
-            if(type === 'Ad Dəyişmə') {
-                t.msgs.push({s:'Sistem', role:'Sistem', t:'Ad dəyişmə tələbiniz qeydə alındı. Adminlər baxacaq.'});
-            }
+            let t = { id:'TKT-'+Math.floor(10000 + Math.random()*90000), uId:curUser.id, uNick:curUser.nick, type, subj:msg, status:'Açıq', msgs:[{s:curUser.nick, role:curUser.role, t:msg}] };
+            if(type === 'Bakiye Yükləmə') t.msgs.push({s:'Sistem', role:'Sistem', t:'Bakiye yükləmək üçün ödəniş çekini şəkil olaraq göndərin və Adminin cavabını gözləyin.'});
+            if(type === 'Ad Dəyişmə') t.msgs.push({s:'Sistem', role:'Sistem', t:'Ad dəyişmə tələbiniz qeydə alındı. Admin adınızı dəyişəcək.'});
             
-            db.tickets.push(t);
-            saveDb();
-            closeModal('new-ticket-modal'); renderUserTickets(); showToast("Bilet yaradıldı!");
+            db.tickets.push(t); saveDb();
+            closeModal('new-ticket-modal'); document.getElementById('t-msg').value=''; renderUserTickets(); showToast("Bilet yaradıldı!");
         }
 
         function renderUserTickets() {
             let arr = db.tickets.filter(t => t.uId === curUser.id).sort((a,b) => a.status === 'Bağlı' ? 1 : b.status === 'Bağlı' ? -1 : 0);
-            document.getElementById('user-tickets').innerHTML = arr.map(t => `
-                <div style="background:var(--input); border:1px solid var(--border); padding:15px; border-radius:5px; display:flex; justify-content:space-between; align-items:center; opacity: ${t.status==='Bağlı'?'0.6':'1'}">
-                    <div><b style="color:var(--primary);">${t.id}</b> - ${t.type} <br>
-                    <span style="font-size:0.8rem; color:var(--gray);">Durum: <span style="color:${t.status==='Açıq'?'var(--gold)':'var(--sec)'}">${t.status}</span></span></div>
-                    <button class="btn" onclick="openChat('${t.id}')">GİR</button>
+            let box = document.getElementById('user-tickets');
+            if(arr.length === 0) box.innerHTML = '<p style="color:var(--gray);">Hələ heç bir biletiniz yoxdur.</p>';
+            else box.innerHTML = arr.map(t => `
+                <div style="background:var(--panel-hover); border:1px solid ${t.status==='Açıq'?'var(--primary)':'var(--border)'}; padding:20px; border-radius:10px; display:flex; justify-content:space-between; align-items:center; opacity: ${t.status==='Bağlı'?'0.6':'1'}; transition:0.3s;">
+                    <div>
+                        <b style="color:var(--primary); font-size:1.1rem;"><i class="fas fa-ticket-alt"></i> ${t.id}</b> - <span style="color:var(--gold)">${t.type}</span> <br>
+                        <span style="font-size:0.9rem; color:var(--gray); display:block; margin-top:5px;">Mövzu: ${t.subj.substring(0,40)}...</span>
+                        <span style="font-size:0.8rem; font-weight:bold; color:${t.status==='Açıq'?'#00e676':'var(--sec)'}; margin-top:5px; display:inline-block;">Durum: ${t.status}</span>
+                    </div>
+                    <button class="btn" style="padding:15px 25px;" onclick="openChat('${t.id}')">GİRİŞ <i class="fas fa-arrow-right"></i></button>
                 </div>
             `).join('');
         }
 
         function openChat(id) {
             curTicket = db.tickets.find(t => t.id === id);
-            document.getElementById('chat-title').innerText = "Bilet: " + curTicket.id;
+            document.getElementById('chat-title').innerText = "Bilet: " + curTicket.id + " | " + curTicket.type;
             
-            let tool = document.getElementById('admin-bal-tool');
-            if((curUser.role === 'Developer' || curUser.role === 'Admin') && curTicket.type === 'Bakiye Yükləmə') { tool.classList.remove('hidden'); } 
-            else { tool.classList.add('hidden'); }
+            // Ad Dəyişmə Aracı
+            let nameTool = document.getElementById('admin-name-change-tool');
+            if((curUser.role === 'Developer' || curUser.role === 'Admin') && curTicket.type === 'Ad Dəyişmə' && curTicket.status !== 'Bağlı') {
+                nameTool.classList.remove('hidden');
+            } else { nameTool.classList.add('hidden'); }
+
+            // Bakiye Vurma Aracı
+            let balTool = document.getElementById('admin-bal-tool');
+            if((curUser.role === 'Developer' || curUser.role === 'Admin') && curTicket.type === 'Bakiye Yükləmə' && curTicket.status !== 'Bağlı') { 
+                balTool.classList.remove('hidden'); 
+            } else { balTool.classList.add('hidden'); }
             
             renderChatMsgs();
             openModal('chat-modal');
+            setTimeout(() => document.getElementById('chat-input').focus(), 100);
         }
 
         function renderChatMsgs() {
             let box = document.getElementById('chat-box');
-            box.classList.remove('large');
             box.innerHTML = curTicket.msgs.map(m => {
                 let isMe = m.s === curUser.nick;
                 let cls = isMe ? 'me' : 'them';
-                let imgTag = m.img ? `<br><img src="${m.img}" alt="Çek" style="max-width:200px;">` : '';
+                if(m.role === 'Sistem') cls = 'them';
+                
+                let imgTag = m.img ? `<br><img src="${m.img}" alt="Çek" onclick="window.open('${m.img}')" style="cursor:zoom-in;">` : '';
                 let roleColor = '#888';
                 if(m.role === 'Developer') roleColor = 'var(--sec)';
                 if(m.role === 'Admin') roleColor = 'var(--gold)';
                 if(m.role === 'Helper') roleColor = 'var(--primary)';
                 if(m.role === 'VIP') roleColor = '#8a2be2';
-                let roleTag = m.role ? `<span style="color:${roleColor}">[${m.role}]</span>` : '';
+                
+                let roleTag = m.role && m.role !== 'Member' && m.role !== 'Sistem' ? `<span style="color:${roleColor}">[${m.role}]</span>` : '';
+                let nameHtml = m.role === 'Sistem' ? `<span style="color:var(--success)"><i class="fas fa-robot"></i> Sistem</span>` : `${roleTag} ${m.s}`;
+                
                 return `
                     <div class="msg ${cls}">
-                        <div class="msg-sender">${roleTag} ${m.s}</div>
-                        <div>${m.t} ${imgTag}</div>
+                        <div class="msg-sender">${nameHtml}</div>
+                        <div style="line-height: 1.4;">${m.t} ${imgTag}</div>
                     </div>
                 `;
             }).join('');
             box.scrollTop = box.scrollHeight;
         }
 
-        function sendMsg() {
-            let txt = document.getElementById('chat-input').value;
-            let img = document.getElementById('chat-img-input').value;
+        function sendTicketMsg() {
+            let txt = document.getElementById('chat-input').value.trim();
+            let img = document.getElementById('chat-img-input').value.trim();
             if(!txt && !img) return;
 
             if(curUser.role === 'Admin' && curTicket.type === 'Bakiye Yükləmə') {
                 let hasDevSpoken = curTicket.msgs.some(m => m.role === 'Developer');
-                if(!hasDevSpoken) return showToast("Öncə Developer müştəri ilə danışmalıdır!");
+                if(!hasDevSpoken && curTicket.uId !== curUser.id) return showToast("Öncə Developer baxmalıdır!");
             }
-            if(curUser.role === 'Helper' && curTicket.type === 'Bakiye Yükləmə') { return showToast("Helper yalnız dəstək biletlərinə baxa bilər!"); }
 
             curTicket.msgs.push({ s: curUser.nick, role: curUser.role, t: txt, img: img });
-            saveDb(); document.getElementById('chat-input').value = ''; document.getElementById('chat-img-input').value = ''; renderChatMsgs();
+            saveDb(); 
+            document.getElementById('chat-input').value = ''; document.getElementById('chat-img-input').value = ''; 
+            renderChatMsgs();
         }
 
         function closeTicket() {
+            if(curTicket.status === 'Bağlı') return showToast("Zaten bağlıdır.");
             curTicket.status = 'Bağlı';
-            saveDb(); renderChatMsgs(); showToast("Bilet bağlandı!"); renderUserTickets(); 
-            if(!document.getElementById('sec-admin').classList.contains('hidden')) { adminView('tickets'); }
+            curTicket.msgs.push({ s: 'Sistem', role: 'Sistem', t: `Bilet ${curUser.nick} tərəfindən bağlandı.` });
+            saveDb(); renderChatMsgs(); showToast("Bilet bağlandı!"); 
+            if(!document.getElementById('sec-admin').classList.contains('hidden')) { adminView('tickets', document.querySelector('.tab-btn.active')); }
+            else { renderUserTickets(); }
+            document.getElementById('admin-bal-tool').classList.add('hidden');
+            document.getElementById('admin-name-change-tool').classList.add('hidden');
         }
 
-        function adminView(v) {
+        /* --- 4. AD DƏYİŞDİRMƏ SİSTEMİ (ADMİN TOOL) --- */
+        function adminChangeNamePrompt() {
+            let newName = prompt("İstifadəçinin yeni adını daxil edin (Nickname):");
+            if(!newName || newName.trim() === '') return;
+            newName = newName.trim();
+            
+            // Adın bazada olub olmadığını yoxla
+            if(db.users.find(u => u.nick.toLowerCase() === newName.toLowerCase())) {
+                return showToast("Bu ad artıq başqa istifadəçi tərəfindən alınmışdır!");
+            }
+
+            let targetUser = db.users.find(u => u.id === curTicket.uId);
+            if(targetUser) {
+                let oldName = targetUser.nick;
+                targetUser.nick = newName;
+                
+                // Biletin sahibinin adını da güncəlləyək
+                curTicket.uNick = newName;
+                
+                curTicket.msgs.push({ s: 'Sistem', role: 'Sistem', t: `Admin ${curUser.nick} tərəfindən ad dəyişdirildi: ${oldName} ➔ ${newName}` });
+                saveDb(); renderChatMsgs(); showToast("Ad uğurla dəyişdirildi!");
+            }
+        }
+
+        function adminAddBal() {
+            let amt = parseFloat(document.getElementById('admin-add-bal').value);
+            if(!amt || amt <= 0) return;
+            let target = db.users.find(u => u.id === curTicket.uId); target.balance += amt;
+            curTicket.msgs.push({ s:'Sistem', role:'Sistem', t:`💰 Hesaba ${amt.toFixed(2)} AZN bakiye yükləndi.`});
+            saveDb(); document.getElementById('admin-add-bal').value = ''; renderChatMsgs(); showToast("Bakiye yükləndi!");
+        }
+
+        /* --- ADMİN PANELİ VƏ CHAT FİX --- */
+        function adminView(v, btnEl) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            if(btnEl) btnEl.classList.add('active');
+
             let cont = document.getElementById('admin-content');
             cont.innerHTML = '';
+            currentGenChat = ''; // Sıfırla
+            
             if(v === 'tickets') {
-                cont.innerHTML = `<input type="text" class="input" id="search-ticket" onkeyup="searchAdminTickets()" placeholder="Bilet Nömrəsi və ya Ad ilə axtar..."><div id="admin-t-list"></div>`;
+                cont.innerHTML = `
+                    <div class="search-bar" style="max-width:100%; margin-bottom:15px; padding:10px;">
+                        <i class="fas fa-search" style="color:var(--gray)"></i>
+                        <input type="text" id="search-ticket" onkeyup="searchAdminTickets()" placeholder="Bilet ID, Nick və ya Mövzu ilə axtar...">
+                    </div>
+                    <div id="admin-t-list" style="display:flex; flex-direction:column; gap:10px;"></div>`;
                 searchAdminTickets();
             }
             else if(v === 'users' && curUser.role === 'Developer') {
-                cont.innerHTML = `<input type="text" class="input" id="search-user" onkeyup="searchUsers()" placeholder="Kullanıcı Adı axtar..."><div id="admin-u-list"></div>`;
+                cont.innerHTML = `
+                    <div class="search-bar" style="max-width:100%; margin-bottom:15px; padding:10px;">
+                        <i class="fas fa-search" style="color:var(--gray)"></i>
+                        <input type="text" id="search-user" onkeyup="searchUsers()" placeholder="Kullanıcı Adı axtar...">
+                    </div>
+                    <div id="admin-u-list" style="overflow-x:auto;"></div>`;
                 searchUsers();
             }
             else if(v === 'products' && curUser.role === 'Developer') {
                 cont.innerHTML = `
-                    <button class="btn" onclick="openModal('add-prod-modal')">+ YENİ MƏHSUL / KATEQORİYA</button>
-                    <table style="margin-top:15px;"><tr><th>Kat</th><th>Ad</th><th>Qiymət</th><th>Sil</th></tr>
-                    ${db.products.map(p => `<tr><td>${p.cat}</td><td>${p.name}</td><td>${p.price.toFixed(2)}</td><td><button class="btn" style="padding:2px 5px" onclick="delProd(${p.id})">X</button></td></tr>`).join('')}
-                    </table>`;
+                    <button class="btn btn-sec" onclick="openModal('add-prod-modal')" style="margin-bottom:15px;"><i class="fas fa-plus"></i> YENİ MƏHSUL</button>
+                    <div style="overflow-x:auto;">
+                        <table><tr><th>Kategoriya</th><th>Ad</th><th>Qiymət (AZN)</th><th>Sil</th></tr>
+                        ${db.products.map(p => `<tr><td>${p.cat}</td><td><b>${p.name}</b></td><td style="color:var(--gold); font-weight:bold;">${p.price.toFixed(2)}</td><td><button class="btn btn-sec" style="padding:5px 10px" onclick="delProd(${p.id})"><i class="fas fa-trash"></i></button></td></tr>`).join('')}
+                        </table>
+                    </div>`;
             }
-            else if(v === 'chat-dev' && (curUser.role === 'Developer' || curUser.role === 'Admin')) { renderGenChat('devAdmin', 'Developer & Admin Çatı'); }
-            else if(v === 'chat-helper') { renderGenChat('helperAdmin', 'Helper & Admin/Dev Çatı'); }
+            // 2. CHAT FIX: input id-ləri fərqli olmalıdır
+            else if(v === 'chat-dev' && (curUser.role === 'Developer' || curUser.role === 'Admin')) { renderGenChat('devAdmin', 'Developer & Admin Müzakirə Çatı'); }
+            else if(v === 'chat-helper') { renderGenChat('helperAdmin', 'Helper Komandası Çatı'); }
             else if(v === 'chat-vip') { renderGenChat('vipChat', 'VIP Üzvlər Çatı'); }
         }
 
         function searchAdminTickets() {
             let val = document.getElementById('search-ticket').value.toLowerCase();
-            let arr = db.tickets.filter(t => t.id.toLowerCase().includes(val) || t.uNick.toLowerCase().includes(val)).sort((a,b) => a.status === 'Bağlı' ? 1 : b.status === 'Bağlı' ? -1 : 0);
+            let arr = db.tickets.filter(t => t.id.toLowerCase().includes(val) || t.uNick.toLowerCase().includes(val) || t.type.toLowerCase().includes(val)).sort((a,b) => a.status === 'Bağlı' ? 1 : b.status === 'Bağlı' ? -1 : 0);
             document.getElementById('admin-t-list').innerHTML = arr.map(t => `
-                <div style="background:var(--bg); margin-bottom:5px; padding:10px; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; opacity: ${t.status==='Bağlı'?'0.6':'1'}">
-                    <div><b>${t.id}</b> - ${t.uNick} - ${t.type} [${t.status}]</div>
-                    <button class="btn" style="padding:5px 10px;" onclick="openChat('${t.id}')">AÇ</button>
+                <div style="background:var(--input); padding:15px; border:1px solid ${t.status==='Açıq'?'var(--primary)':'var(--border)'}; border-radius:8px; display:flex; justify-content:space-between; align-items:center; opacity: ${t.status==='Bağlı'?'0.6':'1'}">
+                    <div>
+                        <b>${t.id}</b> | İst: <b style="color:var(--gold)">${t.uNick}</b> | Növ: ${t.type} <br>
+                        <span style="font-size:0.8rem; color:var(--gray);">Durum: <span style="color:${t.status==='Açıq'?'#00e676':'var(--sec)'}">${t.status}</span></span>
+                    </div>
+                    <button class="btn" style="padding:10px 20px;" onclick="openChat('${t.id}')">AÇ</button>
                 </div>
             `).join('');
         }
@@ -559,16 +931,19 @@
             let val = document.getElementById('search-user').value.toLowerCase();
             let arr = db.users.filter(u => u.nick.toLowerCase().includes(val));
             document.getElementById('admin-u-list').innerHTML = `
-                <table><tr><th>Nick</th><th>Bakiye</th><th>Yetki</th><th>Dəyiş</th></tr>
+                <table><tr><th>Profil</th><th>Nick</th><th>Bakiye</th><th>Yetki</th><th>Dəyiş</th></tr>
                 ${arr.map(u => `
-                    <tr><td>${u.nick} ${u.isVip?'(VIP)':''}</td><td>${u.balance.toFixed(2)}</td>
-                        <td><select id="role-${u.id}" style="background:var(--input); color:var(--text);">
+                    <tr>
+                        <td><img src="${u.photo || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}" style="width:40px; height:40px; border-radius:50%; object-fit:cover;"></td>
+                        <td><b>${u.nick}</b> ${u.isVip?'<i class="fas fa-crown" style="color:var(--gold);" title="VIP"></i>':''}</td>
+                        <td style="color:var(--gold); font-weight:bold;">${u.balance.toFixed(2)}</td>
+                        <td><select id="role-${u.id}" class="input" style="margin:0; padding:5px;">
                             <option value="Member" ${u.role==='Member'?'selected':''}>Member</option>
                             <option value="Helper" ${u.role==='Helper'?'selected':''}>Helper</option>
                             <option value="Admin" ${u.role==='Admin'?'selected':''}>Admin</option>
                             <option value="Developer" ${u.role==='Developer'?'selected':''}>Developer</option>
                         </select></td>
-                        <td><button class="btn" style="padding:2px 5px" onclick="updateRole('${u.id}')">SAXLA</button></td>
+                        <td><button class="btn btn-sec" style="padding:5px 10px;" onclick="updateRole('${u.id}')"><i class="fas fa-save"></i></button></td>
                     </tr>
                 `).join('')}
                 </table>
@@ -577,58 +952,76 @@
 
         function updateRole(uid) {
             let r = document.getElementById('role-'+uid).value;
-            let u = db.users.find(x => x.id === uid); u.role = r; saveDb(); showToast("Yetki dəyişdirildi!");
-        }
-
-        function adminAddBal() {
-            let amt = parseFloat(document.getElementById('admin-add-bal').value);
-            if(!amt || amt <= 0) return;
-            let target = db.users.find(u => u.id === curTicket.uId); target.balance += amt;
-            curTicket.msgs.push({ s:'Sistem', role:'Sistem', t:`${curUser.nick} tərəfindən hesaba ${amt.toFixed(2)} AZN yükləndi.`});
-            saveDb(); document.getElementById('admin-add-bal').value = ''; renderChatMsgs(); showToast("Bakiye yükləndi!");
+            let u = db.users.find(x => x.id === uid); 
+            u.role = r; saveDb(); 
+            if(curUser.id === uid) { curUser.role = r; saveCur(); updateNav(); }
+            showToast("Yetki dəyişdirildi!");
         }
 
         function saveProduct() {
-            let cat = document.getElementById('ap-cat').value;
-            let name = document.getElementById('ap-name').value;
-            let price = parseFloat(document.getElementById('ap-price').value); let req = document.getElementById('ap-label').value; let img = document.getElementById('ap-img').value;
-            if(!cat || !name || !price) return showToast("Doldurun!");
-            db.products.push({ id:Date.now(), cat, name, price, req, img }); saveDb();
-            closeModal('add-prod-modal'); adminView('products');
+            let cat = document.getElementById('ap-cat').value.trim();
+            let name = document.getElementById('ap-name').value.trim();
+            let price = parseFloat(document.getElementById('ap-price').value); 
+            let req = document.getElementById('ap-label').value.trim(); 
+            let img = document.getElementById('ap-img').value.trim();
+            
+            if(!cat || !name || !price || !req) return showToast("Bütün xanaları doldurun!");
+            
+            db.products.push({ id:Date.now(), cat, name, price, req, img: img || 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png' }); 
+            saveDb();
+            closeModal('add-prod-modal'); 
+            
+            document.getElementById('ap-cat').value=''; document.getElementById('ap-name').value=''; 
+            document.getElementById('ap-price').value=''; document.getElementById('ap-label').value=''; document.getElementById('ap-img').value='';
+            
+            adminView('products', document.querySelector('.tab-btn[onclick*="products"]'));
             showToast("Məhsul Əlavə edildi!"); buildCategories(); renderProds('all');
         }
-        function delProd(id) { db.products = db.products.filter(p => p.id !== id);
-            saveDb(); adminView('products'); buildCategories(); renderProds('all'); }
 
-        let currentGenChat = '';
+        function delProd(id) { 
+            if(!confirm("Məhsulu silmək istədiyinizə əminsiniz?")) return;
+            db.products = db.products.filter(p => p.id !== id);
+            saveDb(); adminView('products', document.querySelector('.tab-btn[onclick*="products"]')); 
+            buildCategories(); renderProds('all'); 
+            showToast("Məhsul silindi!");
+        }
+
+        /* --- ÜMUMİ ÇATLAR (Fix olundu) --- */
         function renderGenChat(type, title) {
             if(type === 'vipChat' && !curUser.isVip && curUser.role !== 'Developer' && curUser.role !== 'Admin') return showToast("Bu chat yalnız VIP və yuxarı yetkililər üçündür.");
             currentGenChat = type;
             let cont = document.getElementById('admin-content');
+            
+            // Input eventini Enter üçün tutmaq
             cont.innerHTML = `
-                <h3 class="raj" style="color:var(--primary); margin-bottom:10px;">${title}</h3>
-                <div class="chat-box large" id="gen-chat-box"></div>
-                <div style="display:flex; gap:10px;">
-                    <input type="text" id="gen-chat-input" class="input" style="margin:0; flex:1;" placeholder="Mesaj yaz...">
-                    <button class="btn" onclick="sendGenMsg()">></button>
+                <div class="chat-wrapper" style="height: 550px;">
+                    <h3 class="raj" style="color:var(--primary); margin-bottom:15px; font-size:1.5rem;"><i class="fas fa-comments"></i> ${title}</h3>
+                    <div class="chat-box" id="gen-chat-box" style="flex:1;"></div>
+                    <div style="display:flex; gap:10px; margin-top:10px;">
+                        <input type="text" id="gen-chat-input" class="input" style="margin:0; flex:1; font-size:1.1rem; padding:15px;" placeholder="Mesajınızı bura yazın..." onkeypress="handleEnter(event, sendGenMsg)">
+                        <button class="btn btn-gold" style="padding:0 30px;" onclick="sendGenMsg()"><i class="fas fa-paper-plane" style="font-size:1.2rem;"></i></button>
+                    </div>
                 </div>
             `;
             updateGenChatMsgs();
+            setTimeout(() => document.getElementById('gen-chat-input').focus(), 100);
         }
 
         function updateGenChatMsgs() {
             if(!currentGenChat) return;
             let box = document.getElementById('gen-chat-box'); if(!box) return;
+            
             box.innerHTML = db.generalChats[currentGenChat].map(m => {
                 let roleColor = '#888';
                 if(m.role === 'Developer') roleColor = 'var(--sec)';
                 if(m.role === 'Admin') roleColor = 'var(--gold)';
                 if(m.role === 'Helper') roleColor = 'var(--primary)';
                 if(m.role === 'VIP') roleColor = '#8a2be2';
+                
                 return `
                 <div class="msg ${m.s === curUser.nick ? 'me' : 'them'}">
                     <div class="msg-sender"><span style="color:${roleColor}">[${m.role}]</span> ${m.s}</div>
-                    <div>${m.t}</div>
+                    <div style="line-height:1.4;">${m.t}</div>
                 </div>
                 `;
             }).join('');
@@ -636,14 +1029,27 @@
         }
 
         function sendGenMsg() {
-            let txt = document.getElementById('gen-chat-input').value;
+            let inputEl = document.getElementById('gen-chat-input');
+            if(!inputEl) return;
+            let txt = inputEl.value.trim();
             if(!txt) return;
+            
             let roleToDisplay = curUser.isVip && currentGenChat === 'vipChat' && curUser.role === 'Member' ? 'VIP' : curUser.role;
             db.generalChats[currentGenChat].push({ s: curUser.nick, role: roleToDisplay, t: txt });
-            saveDb(); document.getElementById('gen-chat-input').value = ''; updateGenChatMsgs();
+            saveDb(); 
+            inputEl.value = ''; 
+            updateGenChatMsgs();
         }
 
-        window.onload = () => { updateNav(); buildCategories(); renderProds('all'); };
+        // Tətbiq Başlayanda
+        window.onload = () => { 
+            let savedTheme = localStorage.getItem('sg_theme');
+            if(savedTheme === 'light') { document.body.classList.add('light-mode'); document.getElementById('theme-select').value='light'; }
+            applyLanguage();
+            updateNav(); 
+            buildCategories(); 
+            renderProds('all'); 
+        };
     </script>
 </body>
 </html>
